@@ -1,0 +1,40 @@
+<div class="container mt-5">
+            <h2 class="mb-4">Ingresar Información de Tarjeta de Crédito</h2>
+            <form>
+              <!-- Nombre en la tarjeta -->
+              <div class="mb-3">
+                <label for="cardName" class="form-label">Nombre en la tarjeta</label>
+                <input type="text" class="form-control" id="cardName" placeholder="Nombre completo" required>
+              </div>
+        
+              <!-- Número de tarjeta de crédito -->
+              <div class="mb-3">
+                <label for="cardNumber" class="form-label">Número de Tarjeta de Crédito</label>
+                <input type="text" class="form-control" id="cardNumber" maxlength="16" placeholder="XXXX XXXX XXXX XXXX" required pattern="\d{16}" title="El número de tarjeta debe tener 16 dígitos">
+              </div>
+        
+              <!-- Fecha de expiración -->
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="expiryDate" class="form-label">Fecha de Expiración</label>
+                  <input type="text" class="form-control" id="expiryDate" placeholder="MM/YY" required pattern="\d{2}/\d{2}" title="El formato debe ser MM/YY">
+                </div>
+        
+                <!-- Código CVV -->
+                <div class="col-md-6 mb-3">
+                  <label for="cvv" class="form-label">Código CVV</label>
+                  <input type="text" class="form-control" id="cvv" placeholder="CVV" required pattern="\d{3,4}" title="El CVV debe tener 3 o 4 dígitos">
+                </div>
+              </div>
+         
+              <div class="search-container">
+                <div class="colorElementos">
+                    <a href="confirm.html" style="text-decoration: none;">
+                        <button class="search-button" type="button" style="width: 100%;">Confirmar</button>
+                    </a>
+                </div>
+            </div>
+            
+            </form>
+          </div>
+        
