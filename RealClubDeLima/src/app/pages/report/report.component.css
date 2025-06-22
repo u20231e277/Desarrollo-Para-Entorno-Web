@@ -1,0 +1,36 @@
+.select-area {
+  margin-bottom: 20px;
+}
+.area-list {
+  list-style: none;
+  padding: 0;
+}
+.area-list li {
+  cursor: pointer;
+  margin: 4px 0;
+}
+.dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ccc;
+  margin-right: 5px;
+}
+.dot.active {
+  background: #e2a30e;
+}
+.boton-confirmar {
+  margin-top: 10px;
+  padding: 5px 10px;
+}
+.charts {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+.mas-reservada {
+  font-weight: bold;
+  margin-top: 10px;
+}
