@@ -37,6 +37,9 @@ export class ReportComponent implements OnInit {
     this.http.get<ReservationData>('assets/data/reservations.json').subscribe(d => {
       this.data = d;
       this.calcularTotales();
+      this.seleccionadas = this.areas.map(a => a.nombre);
+      this.dibujarLineas();
+      this.dibujarHistograma();
     });
   }
 
@@ -50,7 +53,6 @@ export class ReportComponent implements OnInit {
   enviarSeleccion() {
     this.seleccionadas = this.getSelectedAreas();
     this.dibujarLineas();
-    this.dibujarHistograma();
   }
 
   calcularTotales() {
@@ -80,7 +82,27 @@ export class ReportComponent implements OnInit {
     ctx.lineTo(margen, margen+alto);
     ctx.lineTo(margen+ancho, margen+alto);
     ctx.stroke();
-    const colores = ['#e57373','#64b5f6','#81c784','#ffb74d','#9575cd','#4db6ac'];
+    ctx.font = '12px Arial';
+    ctx.fillStyle = '#000';
+    for (let i = 0; i < meses; i++) {
+      const x = margen + (i * (ancho / (meses - 1)));
+      ctx.fillText('M' + (i + 1), x - 10, margen + alto + 15);
+    }
+    const paso = Math.ceil(max / 5) || 1;
+    for (let i = 0; i <= max; i += paso) {
+      const y = margen + alto - (i / max) * alto;
+      ctx.fillText(i.toString(), margen - 25, y + 3);
+    }
+    ctx.fillText('Meses', margen + ancho / 2 - 20, margen + alto + 30);
+    ctx.save();
+    ctx.translate(10, margen + alto / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillText('Reservas', 0, 0);
+    ctx.restore();
+    const colores = [
+      '#e57373', '#64b5f6', '#81c784', '#ffb74d',
+      '#9575cd', '#4db6ac', '#f06292', '#aed581'
+    ];
     this.seleccionadas.forEach((nombre, idx) => {
       const area = this.data!.areas.find(a=>a.nombre===nombre);
       if (!area) { return; }
@@ -92,6 +114,10 @@ export class ReportComponent implements OnInit {
         if (i===0) { ctx.moveTo(x,y);} else { ctx.lineTo(x,y); }
       });
       ctx.stroke();
+      ctx.fillStyle = colores[idx % colores.length];
+      ctx.fillRect(margen + ancho + 10, margen + idx * 14 - 8, 10, 10);
+      ctx.fillStyle = '#000';
+      ctx.fillText(nombre, margen + ancho + 25, margen + idx * 14);
     });
   }
 
@@ -111,6 +137,13 @@ export class ReportComponent implements OnInit {
     ctx.lineTo(margen, margen+alto);
     ctx.lineTo(margen+ancho, margen+alto);
     ctx.stroke();
+    ctx.font = '12px Arial';
+    ctx.fillStyle = '#000';
+    const paso = Math.ceil(max / 5) || 1;
+    for (let i = 0; i <= max; i += paso) {
+      const y = margen + alto - (i / max) * alto;
+      ctx.fillText(i.toString(), margen - 25, y + 3);
+    }
     const barWidth = ancho / this.data.areas.length;
     this.data.areas.forEach((a,idx)=>{
       const x = margen + idx * barWidth + barWidth*0.1;
@@ -118,7 +151,18 @@ export class ReportComponent implements OnInit {
       const h = (this.totalPorArea[a.nombre]/max)*alto;
       ctx.fillStyle = '#64b5f6';
       ctx.fillRect(x, y, barWidth*0.8, h);
+      ctx.save();
+      ctx.translate(x + barWidth*0.4, margen + alto + 10);
+      ctx.rotate(-Math.PI/4);
+      ctx.fillText(a.nombre.substring(0,10), 0, 0);
+      ctx.restore();
     });
+    ctx.fillText('Áreas', margen + ancho / 2 - 20, margen + alto + 40);
+    ctx.save();
+    ctx.translate(10, margen + alto / 2);
+    ctx.rotate(-Math.PI/2);
+    ctx.fillText('Reservas', 0, 0);
+    ctx.restore();
     const mas = this.obtenerMasReservada();
     const aviso = document.getElementById('masReservada');
     if (aviso) { aviso.innerText = 'Cancha más reservada: ' + mas; }

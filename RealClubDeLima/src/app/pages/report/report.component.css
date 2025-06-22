@@ -30,6 +30,9 @@
   align-items: center;
   gap: 20px;
 }
+.charts canvas {
+  border: 1px solid #ccc;
+}
 .mas-reservada {
   font-weight: bold;
   margin-top: 10px;
