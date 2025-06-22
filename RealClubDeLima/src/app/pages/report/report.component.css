@@ -1,0 +1,59 @@
+/* ---------- selector de áreas ---------- */
+.select-area {
+  margin-bottom: 20px;
+}
+.area-list {
+  list-style: none;
+  padding: 0;
+}
+.area-list li {
+  cursor: pointer;
+  margin: 4px 0;
+}
+.dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ccc;
+  margin-right: 5px;
+}
+.dot.active { background: #e2a30e; }
+.boton-confirmar {
+  margin-top: 10px;
+  padding: 5px 10px;
+}
+
+/* ---------- contenedor de gráficas ---------- */
+.charts {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* centra en pantallas grandes */
+  gap: 24px;
+}
+
+/* cada gráfico dentro de un wrapper fluido */
+.chart-wrapper {
+  width: 100%;         /* ocupa todo el ancho del padre (360 px en móvil) */
+  max-width: 900px;    /* tope opcional para desktop                      */
+  margin: 0 auto;      /* centra en desktop                               */
+}
+
+/* el canvas hereda ese 100 % de ancho */
+.chart-wrapper canvas {
+  width: 100%;
+  border: 1px solid #ccc;
+}
+
+/* ---------- texto “más reservada” ---------- */
+.mas-reservada {
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.x-legend {
+  font-size: 12px;
+  margin-top: 6px;
+  text-align: left;      /* pone los dos puntos alineados */
+  white-space: pre-line; /* respeta saltos de línea (\n)  */
+}

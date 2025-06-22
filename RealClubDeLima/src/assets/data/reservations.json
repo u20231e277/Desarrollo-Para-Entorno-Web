@@ -1,0 +1,36 @@
+{
+  "areas": [
+    {
+      "nombre": "CANCHA 01 - TENIS DE CAMPO",
+      "reservaMensual": [12, 15, 20, 18, 22, 30]
+    },
+    {
+      "nombre": "CANCHA 02 - TENIS DE CAMPO",
+      "reservaMensual": [8, 10, 14, 12, 15, 18]
+    },
+    {
+      "nombre": "CANCHA DE FUTBOL 12 PERSONAS",
+      "reservaMensual": [20, 25, 24, 28, 30, 35]
+    },
+    {
+      "nombre": "CANCHA DE FUTBOL 6 PERSONAS",
+      "reservaMensual": [16, 18, 22, 19, 24, 28]
+    },
+    {
+      "nombre": "PISCINA DE NATACION PROFESIONAL",
+      "reservaMensual": [10, 12, 15, 11, 14, 16]
+    },
+    {
+      "nombre": "PISCINA DE RELAJO 2024 - J65",
+      "reservaMensual": [5, 6, 9, 8, 10, 12]
+    },
+    {
+      "nombre": "CANCHA DE BASKETBALL 2024 RENOVADO",
+      "reservaMensual": [7, 9, 11, 10, 13, 15]
+    },
+    {
+      "nombre": "CANCHA DE BASKETBALL - 4 INVITADOS MAX",
+      "reservaMensual": [6, 8, 10, 9, 11, 14]
+    }
+  ]
+}
