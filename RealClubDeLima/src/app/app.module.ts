@@ -7,13 +7,17 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './pages/header/header.component';
 import { ReportComponent } from './pages/report/report.component';
 import { InicioComponent } from './pages/inicio/inicio.component';
+import { ConfirmComponent } from './pages/confirm/confirm.component';
+import { ConfirmacionComponent } from './pages/confirmacion/confirmacion.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     ReportComponent,
-    InicioComponent
+    InicioComponent,
+    ConfirmComponent,
+    ConfirmacionComponent
   ],
   imports: [
     BrowserModule,
