@@ -482,6 +482,7 @@ dialog#dialogError2 {
     opacity: 1;
   }
 }
+<<<<<<< HEAD
 
 .area-list {
   list-style: none;
@@ -533,3 +534,5 @@ dialog#dialogError2 {
 }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+=======
+>>>>>>> 96bc9af0d9fa5a9197b1db82bd0f8134f7f5cef7
