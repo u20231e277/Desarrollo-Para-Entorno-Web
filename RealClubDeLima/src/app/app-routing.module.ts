@@ -5,6 +5,7 @@ import { InicioComponent } from './pages/inicio/inicio.component';
 import { ConfirmComponent } from './pages/confirm/confirm.component';
 import { ConfirmacionComponent } from './pages/confirmacion/confirmacion.component';
 import { CreditComponent } from './pages/credit/credit.component';
+import { HomeComponent } from './pages/home/home.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "inicio", pathMatch: "full"},
@@ -13,6 +14,7 @@ const routes: Routes = [
   { path: 'confirm', component: ConfirmComponent },
   { path: 'confirmacion', component: ConfirmacionComponent },
   { path: 'credit', component: CreditComponent },
+  { path: 'home', component: HomeComponent }
 ];
 
 @NgModule({

@@ -531,3 +531,5 @@ dialog#dialogError2 {
 .boton-confirmar:hover {
   background-color: #1d3b70;
 }
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

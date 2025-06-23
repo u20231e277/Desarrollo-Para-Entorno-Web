@@ -1,0 +1,202 @@
+    <main>
+      <section class="select-area">
+        <div class="section-title">
+          <svg
+            width="30"
+            height="30"
+            viewBox="0 0 24 24"
+            fill="#e2a30e"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M12 9V12M12 12V15M12 12H15M12 12H9M21 12C21 13.1819 20.7672 14.3522 20.3149 15.4442C19.8626 16.5361 19.1997 17.5282 18.364 18.364C17.5282 19.1997 16.5361 19.8626 15.4442 20.3149C14.3522 20.7672 13.1819 21 12 21C10.8181 21 9.64778 20.7672 8.55585 20.3149C7.46392 19.8626 6.47177 19.1997 5.63604 18.364C4.80031 17.5282 4.13738 16.5361 3.68508 15.4442C3.23279 14.3522 3 13.1819 3 12C3 9.61305 3.94821 7.32387 5.63604 5.63604C7.32387 3.94821 9.61305 3 12 3C14.3869 3 16.6761 3.94821 18.364 5.63604C20.0518 7.32387 21 9.61305 21 12Z"
+              fill="#e2a30e"
+              stroke="white"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+          <span>Selecciona el Área</span>
+        </div>
+        <div class="search-bar">
+          <input
+            type="text"
+            class="search-input"
+            placeholder="BUSCA TU ÁREA DE PREFERENCIA" />
+          <button class="search-button">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M21 21L15 15M17 10C17 10.9193 16.8189 11.8295 16.4672 12.6788C16.1154 13.5281 15.5998 14.2997 14.9497 14.9497C14.2997 15.5998 13.5281 16.1154 12.6788 16.4672C11.8295 16.8189 10.9193 17 10 17C9.08075 17 8.1705 16.8189 7.32122 16.4672C6.47194 16.1154 5.70026 15.5998 5.05025 14.9497C4.40024 14.2997 3.88463 13.5281 3.53284 12.6788C3.18106 11.8295 3 10.9193 3 10C3 8.14348 3.7375 6.36301 5.05025 5.05025C6.36301 3.7375 8.14348 3 10 3C11.8565 3 13.637 3.7375 14.9497 5.05025C16.2625 6.36301 17 8.14348 17 10Z"
+                stroke="white"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </button>
+        </div>
+        <ul class="area-list">
+          <li *ngFor="let area of areasDisponibles">
+            <label>
+              <input type="radio" name="area" [attr.data-id]="area.id" [(ngModel)]="areaSeleccionada" [value]="area.id" />
+              <span class="radio-custom"></span>
+              {{ area.nombre }}
+              </label>
+              </li>
+              </ul>
+      </section>
+      <section class="select-dates">
+        <div class="section-title">
+          <svg
+            width="30"
+            height="30"
+            viewBox="0 0 24 24"
+            fill="#e2a30e"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M12 9V12M12 12V15M12 12H15M12 12H9M21 12C21 13.1819 20.7672 14.3522 20.3149 15.4442C19.8626 16.5361 19.1997 17.5282 18.364 18.364C17.5282 19.1997 16.5361 19.8626 15.4442 20.3149C14.3522 20.7672 13.1819 21 12 21C10.8181 21 9.64778 20.7672 8.55585 20.3149C7.46392 19.8626 6.47177 19.1997 5.63604 18.364C4.80031 17.5282 4.13738 16.5361 3.68508 15.4442C3.23279 14.3522 3 13.1819 3 12C3 9.61305 3.94821 7.32387 5.63604 5.63604C7.32387 3.94821 9.61305 3 12 3C14.3869 3 16.6761 3.94821 18.364 5.63604C20.0518 7.32387 21 9.61305 21 12Z"
+              fill="#e2a30e"
+              stroke="white"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+          <span>Selecciona tus invitados y fechas</span>
+        </div>
+        <div class="invites">
+          <div class="dropdown">
+            <div class="icon-top">
+              <svg
+                viewBox="0 0 11 7"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M5.5 7L10.2631 0.25H0.73686L5.5 7Z" fill="white" />
+              </svg>
+            </div>
+            <div class="icon-bottom">
+              <svg
+                width="11"
+                height="7"
+                viewBox="0 0 11 7"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M5.5 0L10.2631 6.75H0.73686L5.5 0Z" fill="white" />
+              </svg>
+            </div>
+            <div class="message">
+              <strong>Invitados</strong>
+              <span class="small-text">
+                <span class="cantidadAdultos">0</span> adultos,
+                <span class="cantidadNiños">0</span> niños</span>
+            </div>
+            <div class="add-invitados">
+              <label for="add-invitados">
+                <input
+                  type="number"
+                  id="add-adultos"
+                  name="add-adultos"
+                  value="0"
+                  min="1"
+                  max="5" />
+                <span>+ Adultos</span>
+              </label>
+              <label for="add-niños">
+                <input
+                  type="number"
+                  id="add-niños"
+                  name="add-niños"
+                  value="0"
+                  min="1"
+                  max="5" />
+                <span>+ Niños</span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <!-- ... Parte anterior sin cambios ... -->
+
+<!-- FECHA INICIAL -->
+<!-- FECHA INICIAL -->
+<div class="form-group">
+  <label for="fechaInicial"><strong>Fecha Inicial</strong></label>
+  <input type="date" id="fechaInicial" [(ngModel)]="fechaInicial" class="input-fecha" />
+</div>
+
+<!-- FECHA FINAL -->
+<div class="form-group">
+  <label for="fechaFinal"><strong>Fecha Final</strong></label>
+  <input type="date" id="fechaFinal" [(ngModel)]="fechaFinal" class="input-fecha" />
+</div>
+<!-- ... Parte final sin cambios ... -->
+
+      </section>
+
+      <section class="search-container">
+        <button class="search-button" (click)="buscarReservas()">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M21 21L15 15M17 10C17 10.9193 16.8189 11.8295 16.4672 12.6788C16.1154 13.5281 15.5998 14.2997 14.9497 14.9497C14.2997 15.5998 13.5281 16.1154 12.6788 16.4672C11.8295 16.8189 10.9193 17 10 17C9.08075 17 8.1705 16.8189 7.32122 16.4672C6.47194 16.1154 5.70026 15.5998 5.05025 14.9497C4.40024 14.2997 3.88463 13.5281 3.53284 12.6788C3.18106 11.8295 3 10.9193 3 10C3 8.14348 3.7375 6.36301 5.05025 5.05025C6.36301 3.7375 8.14348 3 10 3C11.8565 3 13.637 3.7375 14.9497 5.05025C16.2625 6.36301 17 8.14348 17 10Z"
+              stroke="white"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+          Buscar reservas          
+        </button>
+
+        <div class="containner-results" *ngIf="horariosDisponibles.length">
+
+  <h3>Horarios disponibles:</h3>
+
+  <ul class="horarios-list">
+    <li *ngFor="let h of horariosDisponibles">
+      <button
+        class="horario-btn"
+        [ngClass]="{
+          disponible: !horariosOcupados.includes(h.start),
+          ocupado   :  horariosOcupados.includes(h.start)
+        }"
+        [disabled]="horariosOcupados.includes(h.start)"
+        (click)="seleccionarHorario(h)">
+        {{ h.start }} – {{ h.end }}
+      </button>
+    </li>
+  </ul>
+
+</div>
+
+      </section>
+    </main>
+<dialog id="dialogConfirmation">
+  <h2>¡Horario Seleccionado!</h2>
+  <p>Has seleccionado el horario <span id="selected-time"></span>.</p>
+  <p><strong>¿Deseas agregarlo a tus reservas?</strong></p>
+  <div class="buttons">
+    <button id="confirm-button">Sí</button>
+    <button id="cancel-button">No</button>
+  </div>
+</dialog>
+
+    <dialog id="dialogError">
+      <h2>Info!</h2>
+      <p>Esta fecha está reservada.</p>
+    </dialog>
+
+    <dialog id="dialogError2">
+      <h2>Info!</h2>
+      <p>No puedes reservar dos veces en el mismo día.</p>
+    </dialog>
+
+    <dialog id="errorSearch">
+      <h2>Info!</h2>
+      <p>Seleccione un área de preferencia.</p>
+    </dialog>
+
+    <dialog id="errorFechas">
+  <h2>Info!</h2>
+  <p>Seleccione la fecha inicial y final.</p>
+</dialog>
