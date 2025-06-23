@@ -18,6 +18,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
+import { FooterComponent } from './pages/footer/footer.component';
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     ConfirmComponent,
     ConfirmacionComponent,
     CreditComponent,
-    HomeComponent
+    HomeComponent,
+    FooterComponent
     
   ],
   imports: [
