@@ -442,7 +442,8 @@ dialog {
   }
 }
 
-dialog#dialogConfirmation {
+dialog#dialogConfirmation,
+dialog#dialogCancel {
   background-color: #e2a30e;
   color: #14274a;
 
@@ -467,7 +468,8 @@ dialog#dialogConfirmation {
 
 dialog#dialogError,
 dialog#errorSearch,
-dialog#dialogError2 {
+dialog#dialogError2,
+dialog#dialogTiempoExpirado  {
   background-color: #14274a;
   color: #fff;
 }

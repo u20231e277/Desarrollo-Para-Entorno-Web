@@ -1,4 +1,7 @@
     <main>
+      <div class="temporizador" *ngIf="countdown > 0">
+  Tiempo restante para reservar: <strong>{{ formatoTiempo(countdown) }}</strong>
+</div>
       <section class="select-area">
         <div class="section-title">
           <svg
@@ -187,16 +190,20 @@
     </dialog>
 
     <dialog id="dialogError2">
-      <h2>Info!</h2>
+      <h2>Error!</h2>
       <p>No puedes reservar dos veces en el mismo día.</p>
     </dialog>
 
     <dialog id="errorSearch">
-      <h2>Info!</h2>
+      <h2>Error!</h2>
       <p>Seleccione un área de preferencia.</p>
     </dialog>
 
     <dialog id="errorFechas">
-  <h2>Info!</h2>
+  <h2>Error!</h2>
   <p>Seleccione la fecha inicial y final.</p>
+</dialog>
+<dialog id="dialogTiempoExpirado">
+  <h2>Tiempo expirado</h2>
+  <p>Tu tiempo para realizar la reserva ha terminado.</p>
 </dialog>

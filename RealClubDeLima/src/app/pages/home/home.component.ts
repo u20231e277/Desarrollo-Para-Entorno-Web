@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { CalendarOptions } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -16,8 +17,18 @@ declare global {
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  
+
+    areaSeleccionada: string = '';
+  fechaInicial: string = '';
+  fechaFinal: string = '';
+  horariosDisponibles: { start: string; end: string }[] = [];
+  horariosOcupados: string[] = [];
+  reservasConfirmadas: any[] = [];
+  horarioSeleccionado: { start: string; end: string } | null = null;
   areasDisponibles: any[] = [];
+  countdown    = 300;      // segundos (5 min)
+private timerID: any;    // referencia al setInterval
+ // router: any;
 
   ngOnInit(): void {
     if (window.DATA && window.DATA.ambientes) {
@@ -26,22 +37,71 @@ export class HomeComponent implements OnInit {
     } else {
       console.error('No se encontró window.DATA.ambientes');
     }
+     const confirmBtn = document.getElementById('confirm-button');
+    const cancelBtn = document.getElementById('cancel-button');
+
+    if (confirmBtn && cancelBtn) {
+      confirmBtn.addEventListener('click', () => this.confirmarReserva());
+      cancelBtn.addEventListener('click', () => {
+        const modal = document.getElementById('dialogConfirmation') as HTMLDialogElement;
+        modal?.close();
+      });
+    }
+
+    this.cargarReservas();
+
+  // Iniciar temporizador de 5 min
+  this.iniciarTemporizador();
+  this.cargarReservas();
   }
 
-  // areaSeleccionada: string = '';
-fechaInicial: string = '';
-fechaFinal: string = '';
- areaSeleccionada: number | null = null;
+  // Arranca el conteo regresivo
+iniciarTemporizador() {
+  const intervalo = setInterval(() => {
+    if (this.countdown > 0) {
+      this.countdown--;
+    } else {
+      clearInterval(intervalo);
+
+      // Mostrar modal de tiempo expirado
+      this.mostrarDialogo('dialogTiempoExpirado');
+
+      // Cerrar el modal y redirigir después de 2.5 segundos
+      setTimeout(() => {
+        this.router.navigate(['/inicio']);
+      }, 2500);
+    }
+  }, 1000);
+}
+
+
+formatoTiempo(segundos: number): string {
+  const minutos = Math.floor(segundos / 60);
+  const restoSegundos = segundos % 60;
+  return `${this.agregarCero(minutos)}:${this.agregarCero(restoSegundos)}`;
+}
+
+agregarCero(valor: number): string {
+  return valor < 10 ? '0' + valor : valor.toString();
+}
+
+constructor(private router: Router) {}
+
+// Buena práctica: detener el intervalo si el componente se destruye
+ngOnDestroy(): void {
+  clearInterval(this.timerID);
+}
+
   adultos: number = 0;
   ninos: number = 0;
 
   
 //  ❗  Mapa ficticio de reservas   (área → fecha ISO → array de horas ocupadas)
-reservas: { [idArea: number]: { [fechaISO: string]: string[] } } = {
-  1: { '2025-06-28': ['09:30', '10:45', '17:00'] },
-  2: { '2025-06-28': ['10:45', '12:00'] },
-  3: { '2025-06-29': ['07:00', '14:30'] }
-};
+// reservas: { [idArea: number]: { [fechaISO: string]: string[] } } = {
+//   1: { '2025-06-28': ['09:30', '10:45', '17:00'] },
+//   2: { '2025-06-28': ['10:45', '12:00'] },
+//   3: { '2025-06-29': ['07:00', '14:30'] }
+// };
  
 // handleDateClick(arg: any) {
 //   if (!this.areaSeleccionada) {
@@ -54,8 +114,8 @@ reservas: { [idArea: number]: { [fechaISO: string]: string[] } } = {
 mostrarCalendarioInicial: boolean = false;
 mostrarCalendarioFinal: boolean = false;
 
-horariosDisponibles: {start: string, end: string}[] = [];
-horariosOcupados   : string[] = [];
+// horariosDisponibles: {start: string, end: string}[] = [];
+// horariosOcupados   : string[] = [];
 
 // Simulando reservas por área
 // reservasPorArea: { [areaId: number]: string[] } = {
@@ -66,19 +126,58 @@ horariosOcupados   : string[] = [];
 // };
 
 // ---------- MÉTODOS ----------
-buscarReservas() {
-  if (!this.areaSeleccionada) { this.mostrarDialogo('errorSearch'); return; }
-  if (!this.fechaInicial || !this.fechaFinal) { this.mostrarDialogo('errorFechas'); return; }
+buscarReservas(): void {
+    if (!this.areaSeleccionada) {
+      this.mostrarDialogo('errorSearch');
+      return;
+    }
 
-  // *Generar todos los turnos*
-  this.horariosDisponibles = this.generarTurnos();
+    if (!this.fechaInicial || !this.fechaFinal) {
+      this.mostrarDialogo('errorFechas');
+      return;
+    }
 
-  // *Filtrar ocupados por área + fecha inicial*
-  const fechaISO = this.fechaInicial;                  // ej 2025-06-28
-  const ocupadosArea = this.reservas[this.areaSeleccionada] || {};
-  this.horariosOcupados = ocupadosArea[fechaISO] || [];
-  console.log('Ocupados para área-', this.areaSeleccionada, fechaISO, this.horariosOcupados);
+    this.generarHorarios();
+    this.filtrarHorariosOcupados();
+  }
+
+ generarHorarios(): void {
+    this.horariosDisponibles = [];
+    const inicio = new Date(`${this.fechaInicial}T07:00`);
+    const fin = new Date(`${this.fechaInicial}T21:00`);
+
+    while (inicio < fin) {
+      const start = inicio.toTimeString().substring(0, 5);
+      const siguiente = new Date(inicio.getTime() + 75 * 60000); // 1h + 15min
+      const end = siguiente.toTimeString().substring(0, 5);
+
+      this.horariosDisponibles.push({ start, end });
+      inicio.setTime(siguiente.getTime());
+    }
+  }
+
+seleccionarHorario(horario: { start: string; end: string }): void {
+  const yaReservado = this.reservasConfirmadas.some(r =>
+    r.area === this.areaSeleccionada &&
+    r.fecha === this.fechaInicial
+  );
+
+  if (yaReservado) {
+    const modalError = document.getElementById('dialogError2') as HTMLDialogElement;
+    modalError?.showModal();
+    setTimeout(() => modalError?.close(), 2500);
+    return;
+  }
+
+  this.horarioSeleccionado = horario;
+  const modal = document.getElementById('dialogConfirmation') as HTMLDialogElement;
+  if (modal) {
+    document.getElementById('selected-time')!.textContent = `${horario.start} – ${horario.end}`;
+    modal.showModal();
+  }
 }
+
+
 
 generarTurnos() {
   const lista:{start:string,end:string}[] = [];
@@ -96,18 +195,63 @@ generarTurnos() {
   return lista;
 }
 
-seleccionarHorario(h: {start:string,end:string}) {
-  const dialog = document.getElementById('dialogConfirmation') as HTMLDialogElement;
-  const span   = document.getElementById('selected-time');
-  if (span) { span.textContent = `${h.start} - ${h.end}`; }
-  dialog?.showModal();
+confirmarReserva(): void {
+  if (this.horarioSeleccionado) {
+    const yaReservado = this.reservasConfirmadas.some(r =>
+      r.area === this.areaSeleccionada &&
+      r.fecha === this.fechaInicial
+    );
+
+    if (yaReservado) {
+      this.mostrarDialogo('dialogError2');
+      return;
+    }
+
+    const reserva = {
+      area: this.areaSeleccionada,
+      fecha: this.fechaInicial,
+      horaInicio: this.horarioSeleccionado.start,
+      horaFin: this.horarioSeleccionado.end,
+    };
+
+    this.reservasConfirmadas.push(reserva);
+    localStorage.setItem('reservas', JSON.stringify(this.reservasConfirmadas));
+
+    this.filtrarHorariosOcupados();
+    this.horarioSeleccionado = null;
+
+    this.mostrarDialogo('dialogConfirmation');
+
+  }
 }
 
-mostrarDialogo(id:string) {
+
+  filtrarHorariosOcupados(): void {
+    const reservas = this.reservasConfirmadas.filter(
+      r => r.area === this.areaSeleccionada && r.fecha === this.fechaInicial
+    );
+    this.horariosOcupados = reservas.map(r => r.horaInicio);
+  }
+
+  cargarReservas(): void {
+    const data = localStorage.getItem('reservas');
+    this.reservasConfirmadas = data ? JSON.parse(data) : [];
+  }
+
+
+mostrarDialogo(id: string): void {
   const dlg = document.getElementById(id) as HTMLDialogElement;
-  dlg?.showModal();
-  setTimeout(()=>dlg?.close(),2500);
+  if (!dlg) return;
+
+  dlg.classList.remove('fade-out'); // Asegura que no tenga la clase previa
+  dlg.showModal();
+
+  setTimeout(() => {
+    dlg.classList.add('fade-out');
+    setTimeout(() => dlg.close(), 500); // Espera a que termine la transición
+  }, 2000); // Mostrar el modal por 2s antes de empezar a desvanecer
 }
+
 
 
 

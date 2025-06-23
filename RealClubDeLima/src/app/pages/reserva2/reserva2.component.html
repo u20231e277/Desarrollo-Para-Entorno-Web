@@ -1,2 +1,48 @@
-<div style="text-align: center;"><h2>Mis Reservas</h2>
-<main><p>No hay detalles de la reserva disponibles.</p></main></div>
+<!-- <section *ngIf="reservas.length > 0; else noReservas">
+  <h2>Mis Reservas</h2>
+  <ul>
+    <li *ngFor="let reserva of reservas; let i = index">
+      <strong>Área:</strong> {{ getNombreArea(reserva.area) }} |
+      <strong>Fecha:</strong> {{ reserva.fecha }} |
+      <strong>Hora:</strong> {{ reserva.horaInicio }} – {{ reserva.horaFin }}
+      <button (click)="cancelarReserva(i)">Cancelar</button>
+    </li>
+  </ul>
+</section> -->
+
+<ng-template #noReservas>
+  <p>No tienes reservas registradas.</p>
+</ng-template>
+
+<div class="reserva-container">
+  <h2 class="titulo">Mis Reservas Confirmadas</h2>
+
+  <div *ngIf="reservas.length === 0" class="mensaje-vacio">
+    No tienes reservas registradas.
+  </div>
+
+  <div *ngFor="let reserva of reservas" class="reserva-card">
+    <img [src]="obtenerImagen(reserva.area)" alt="Imagen del ambiente" class="reserva-imagen">
+    <div class="reserva-detalles">
+      <h3>{{ obtenerNombreArea(reserva.area) }}</h3>
+      <p><strong>Fecha:</strong> {{ reserva.fecha }}</p>
+      <p><strong>Horario:</strong> {{ reserva.horaInicio }} – {{ reserva.horaFin }}</p>
+    </div>
+    <button class="btn-cancelar" (click)="cancelarReserva(reserva)">Cancelar</button>
+  </div>
+</div>
+
+<dialog id="dialogCancel">
+  <div>
+    <p>¿Estás seguro de que deseas cancelar esta reserva?</p>
+    <div class="buttons">
+      <button (click)="confirmarCancelacion()" class="btn-confirmar">Sí</button>
+      <button (click)="cerrarModal()" class="btn-cancelar1">No</button>
+    </div>
+
+    <!-- Mensaje de éxito -->
+    <div *ngIf="mensajeCancelacionMostrado" class="mensaje-exito">
+      ✅ Cancelación exitosa
+    </div>
+  </div>
+</dialog>

@@ -19,6 +19,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
 import { FooterComponent } from './pages/footer/footer.component';
+import { CommonModule } from '@angular/common';
+import { Reserva2Component } from './pages/reserva2/reserva2.component';
 
 
 @NgModule({
@@ -31,7 +33,8 @@ import { FooterComponent } from './pages/footer/footer.component';
     ConfirmacionComponent,
     CreditComponent,
     HomeComponent,
-    FooterComponent
+    FooterComponent,
+    Reserva2Component
     
   ],
   imports: [
@@ -44,7 +47,8 @@ import { FooterComponent } from './pages/footer/footer.component';
      MatDatepickerModule,
     MatFormFieldModule,
     MatInputModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    CommonModule 
     
   ],
   providers: [],
