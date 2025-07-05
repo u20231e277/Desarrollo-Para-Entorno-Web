@@ -21,6 +21,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { FooterComponent } from './pages/footer/footer.component';
 import { CommonModule } from '@angular/common';
 import { Reserva2Component } from './pages/reserva2/reserva2.component';
+import { ReservaComponent } from './pages/reserva/reserva.component';
+import { RouterModule } from '@angular/router';
 
 
 @NgModule({
@@ -34,7 +36,8 @@ import { Reserva2Component } from './pages/reserva2/reserva2.component';
     CreditComponent,
     HomeComponent,
     FooterComponent,
-    Reserva2Component
+    Reserva2Component,
+    ReservaComponent
     
   ],
   imports: [
@@ -48,7 +51,8 @@ import { Reserva2Component } from './pages/reserva2/reserva2.component';
     MatFormFieldModule,
     MatInputModule,
     MatNativeDateModule,
-    CommonModule 
+    CommonModule ,
+    RouterModule    
     
   ],
   providers: [],

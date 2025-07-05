@@ -8,6 +8,7 @@ import { ConfirmacionComponent } from './pages/confirmacion/confirmacion.compone
 import { CreditComponent } from './pages/credit/credit.component';
 import { HomeComponent } from './pages/home/home.component';
 import { Reserva2Component } from './pages/reserva2/reserva2.component';
+import { ReservaComponent } from './pages/reserva/reserva.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "inicio", pathMatch: "full"},
@@ -19,7 +20,8 @@ const routes: Routes = [
   { path: 'credit', component: CreditComponent },
   { path: 'home', component: HomeComponent },
   {path: 'login', component: LoginComponent},
-  {path: 'reserva2', component: Reserva2Component}
+  {path: 'reserva2', component: Reserva2Component},
+  {path: 'reserva', component: ReservaComponent}
 ];
 
 @NgModule({
