@@ -21,33 +21,41 @@
           <span>Selecciona el Área</span>
         </div>
         <div class="search-bar">
-          <input
-            type="text"
-            class="search-input"
-            placeholder="BUSCA TU ÁREA DE PREFERENCIA" />
-          <button class="search-button">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M21 21L15 15M17 10C17 10.9193 16.8189 11.8295 16.4672 12.6788C16.1154 13.5281 15.5998 14.2997 14.9497 14.9497C14.2997 15.5998 13.5281 16.1154 12.6788 16.4672C11.8295 16.8189 10.9193 17 10 17C9.08075 17 8.1705 16.8189 7.32122 16.4672C6.47194 16.1154 5.70026 15.5998 5.05025 14.9497C4.40024 14.2997 3.88463 13.5281 3.53284 12.6788C3.18106 11.8295 3 10.9193 3 10C3 8.14348 3.7375 6.36301 5.05025 5.05025C6.36301 3.7375 8.14348 3 10 3C11.8565 3 13.637 3.7375 14.9497 5.05025C16.2625 6.36301 17 8.14348 17 10Z"
-                stroke="white"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round" />
-            </svg>
-          </button>
-        </div>
+  <input
+    type="text"
+    class="search-input"
+    placeholder="BUSCA TU ÁREA DE PREFERENCIA"
+    [(ngModel)]="textoBusqueda"
+    (input)="filtrarAreas()" />
+  <button class="search-button" (click)="filtrarAreas()">
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M21 21L15 15M17 10C17 10.9193 16.8189 11.8295 16.4672 12.6788C16.1154 13.5281 15.5998 14.2997 14.9497 14.9497C14.2997 15.5998 13.5281 16.1154 12.6788 16.4672C11.8295 16.8189 10.9193 17 10 17C9.08075 17 8.1705 16.8189 7.32122 16.4672C6.47194 16.1154 5.70026 15.5998 5.05025 14.9497C4.40024 14.2997 3.88463 13.5281 3.53284 12.6788C3.18106 11.8295 3 10.9193 3 10C3 8.14348 3.7375 6.36301 5.05025 5.05025C6.36301 3.7375 8.14348 3 10 3C11.8565 3 13.637 3.7375 14.9497 5.05025C16.2625 6.36301 17 8.14348 17 10Z"
+        stroke="white"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round" />
+    </svg>
+  </button>
+</div>
         <ul class="area-list">
-          <li *ngFor="let area of areasDisponibles">
-            <label>
-              <input type="radio" name="area" [attr.data-id]="area.id" [(ngModel)]="areaSeleccionada" [value]="area.id" />
-              <span class="radio-custom"></span>
-              {{ area.nombre }}
-              </label>
-              </li>
-              </ul>
+  <li *ngFor="let area of areasFiltradas">
+    <label>
+      <input
+        type="radio"
+        name="area"
+        [attr.data-id]="area.id"
+        [(ngModel)]="areaSeleccionada"
+        [value]="area.id"
+      />
+      <span class="radio-custom"></span>
+      {{ area.nombre }}
+    </label>
+  </li>
+</ul>
       </section>
       <section class="select-dates">
         <div class="section-title">
@@ -67,69 +75,60 @@
           </svg>
           <span>Selecciona tus invitados y fechas</span>
         </div>
-        <div class="invites">
-          <div class="dropdown">
-            <div class="icon-top">
-              <svg
-                viewBox="0 0 11 7"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg">
-                <path d="M5.5 7L10.2631 0.25H0.73686L5.5 7Z" fill="white" />
-              </svg>
-            </div>
-            <div class="icon-bottom">
-              <svg
-                width="11"
-                height="7"
-                viewBox="0 0 11 7"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg">
-                <path d="M5.5 0L10.2631 6.75H0.73686L5.5 0Z" fill="white" />
-              </svg>
-            </div>
-            <div class="message">
-              <strong>Invitados</strong>
-              <span class="small-text">
-                <span class="cantidadAdultos">0</span> adultos,
-                <span class="cantidadNiños">0</span> niños</span>
-            </div>
-            <div class="add-invitados">
-              <label for="add-invitados">
-                <input
-                  type="number"
-                  id="add-adultos"
-                  name="add-adultos"
-                  value="0"
-                  min="1"
-                  max="5" />
-                <span>+ Adultos</span>
-              </label>
-              <label for="add-niños">
-                <input
-                  type="number"
-                  id="add-niños"
-                  name="add-niños"
-                  value="0"
-                  min="1"
-                  max="5" />
-                <span>+ Niños</span>
-              </label>
-            </div>
-          </div>
-        </div>
+<div class="invites">
+  <div class="dropdown" (click)="toggleInvitados()">
+    <div class="message">
+      <strong>INVITADOS</strong>
+  <span class="resumen-invitados">{{ adultos }} adultos, {{ ninos }} niños</span>
+  <span class="arrow" [class.open]="mostrarInvitados">&#9662;</span> <!-- ▼ -->
+    </div>
+  </div>
+
+<!-- Agregamos visibilidad controlada -->
+<div class="add-invitados" [class.open]="mostrarInvitados">
+  <div  >
+    <label>Adultos:</label>
+    <button (click)="cambiarAdultos(-1)" [disabled]="adultos <= 0">-</button>
+    <span>{{ adultos }}</span>
+    <button (click)="cambiarAdultos(1)" [disabled]="totalInvitados >= maxInvitados">+</button>
+  </div>
+  <div class="invitado-item">
+    <label>Niños: &nbsp;&nbsp;</label>
+    <button (click)="cambiarNinos(-1)" [disabled]="ninos <= 0">-</button>
+    <span>{{ ninos }}</span>
+    <button (click)="cambiarNinos(1)" [disabled]="totalInvitados >= maxInvitados">+</button>
+  </div>
+</div>
+</div>
+
+
+
         <!-- ... Parte anterior sin cambios ... -->
 
 <!-- FECHA INICIAL -->
-<!-- FECHA INICIAL -->
-<div class="form-group">
-  <label for="fechaInicial"><strong>Fecha Inicial</strong></label>
-  <input type="date" id="fechaInicial" [(ngModel)]="fechaInicial" class="input-fecha" />
+<div class="dropdown-fecha" (click)="toggleCalendario('inicial')">
+  <div class="dropdown-header">
+    <strong>FECHA INICIAL</strong>
+    <span>{{ fechaInicial || 'Seleccionar' }}</span>
+    <span class="arrow" [class.abierto]="calendarioAbierto === 'inicial'">▼</span>
+  </div>
+  <div class="calendario" *ngIf="calendarioAbierto === 'inicial'">
+    <input type="date" [value]="fechaInicial"
+       (change)="actualizarFechaInicial($event)"
+       (click)="$event.stopPropagation()" />
+  </div>
 </div>
 
 <!-- FECHA FINAL -->
-<div class="form-group">
-  <label for="fechaFinal"><strong>Fecha Final</strong></label>
-  <input type="date" id="fechaFinal" [(ngModel)]="fechaFinal" class="input-fecha" />
+<div class="dropdown-fecha" (click)="toggleCalendario('final')">
+  <div class="dropdown-header">
+    <strong>FECHA FINAL</strong>
+    <span>{{ fechaFinal || 'Seleccionar' }}</span>
+    <span class="arrow" [class.abierto]="calendarioAbierto === 'final'">▼</span>
+  </div>
+  <div class="calendario" *ngIf="calendarioAbierto === 'final'">
+    <input type="date" [(ngModel)]="fechaFinal" (click)="$event.stopPropagation()" />
+  </div>
 </div>
 <!-- ... Parte final sin cambios ... -->
 
