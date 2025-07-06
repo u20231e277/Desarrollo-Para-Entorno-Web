@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 declare global {
   interface Window {
@@ -12,11 +13,15 @@ declare global {
   styleUrls: ['./reserva2.component.css']
 })
 export class Reserva2Component implements OnInit {
+
+  constructor(private router: Router) {}
   reservas: any[] = [];
   areasDisponibles: any[] = [];
   ambientes: any[] = [];
   reservaPendienteCancelacion: any = null;
   mensajeCancelacionMostrado: boolean = false;
+
+  
 
   ngOnInit(): void {
     // Cargar áreas desde window.DATA
@@ -92,4 +97,11 @@ cerrarModal(): void {
   const modal = document.getElementById('dialogCancel') as HTMLDialogElement;
   modal?.close();
 }
+
+verDetalle(reserva: any) {
+    /* Navega a /reserva-detalle enviando todo el objeto
+       en el “navigation state”.  Sin tocar nada más.      */
+    this.router.navigate(['reserva'], { state: { reserva } });
+  }
+
 }

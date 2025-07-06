@@ -1,0 +1,19 @@
+<ng-container *ngIf="reserva; else sinInfo">
+  <div class="booking">
+    <div class="booking--tapizado">
+        <h2 class="booking__titulo">Detalle de Reserva</h2>
+        <h3 class="booking__instruction">Confirme la información de su reserva</h3>
+        <p class="booking__parrafo parrafo--fondo"><strong class="parrafo--subtitulo">Área:</strong> {{ obtenerNombreArea(reserva.area) }}</p>
+        <p class="booking__parrafo parrafo--fondo"><strong class="parrafo--subtitulo">Fecha:</strong> {{ reserva.fecha }}</p>
+        <p class="booking__parrafo parrafo--fondo"><strong class="parrafo--subtitulo">Horario:</strong> {{ reserva.horaInicio }} – {{ reserva.horaFin }}</p>
+
+    </div>
+    <button routerLink="../login" class="booking__button button--confirm">Confirmar Reserva</button>
+    <button routerLink="../login" class="booking__button button--cancel">Cancelar Reserva</button>
+    <button routerLink="../reserva2" class="booking__button">Volver</button>
+  </div>
+</ng-container>
+
+<ng-template #sinInfo>
+  <p>No se pudo recuperar la información de la reserva.</p>
+</ng-template>

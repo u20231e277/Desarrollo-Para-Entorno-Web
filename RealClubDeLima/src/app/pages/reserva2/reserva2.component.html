@@ -21,14 +21,14 @@
     No tienes reservas registradas.
   </div>
 
-  <div *ngFor="let reserva of reservas" class="reserva-card">
+  <div *ngFor="let reserva of reservas" class="reserva-card" (click)="verDetalle(reserva)"> 
     <img [src]="obtenerImagen(reserva.area)" alt="Imagen del ambiente" class="reserva-imagen">
     <div class="reserva-detalles">
       <h3>{{ obtenerNombreArea(reserva.area) }}</h3>
       <p><strong>Fecha:</strong> {{ reserva.fecha }}</p>
       <p><strong>Horario:</strong> {{ reserva.horaInicio }} – {{ reserva.horaFin }}</p>
     </div>
-    <button class="btn-cancelar" (click)="cancelarReserva(reserva)">Cancelar</button>
+    <button class="btn-cancelar" (click)="cancelarReserva(reserva); $event.stopPropagation()">Cancelar</button>
   </div>
 </div>
 
