@@ -1,40 +1,142 @@
-<div class="container mt-5">
-            <h2 class="mb-4">Ingresar Información de Tarjeta de Crédito</h2>
-            <form>
-              <!-- Nombre en la tarjeta -->
-              <div class="mb-3">
-                <label for="cardName" class="form-label">Nombre en la tarjeta</label>
-                <input type="text" class="form-control" id="cardName" placeholder="Nombre completo" required>
-              </div>
-        
-              <!-- Número de tarjeta de crédito -->
-              <div class="mb-3">
-                <label for="cardNumber" class="form-label">Número de Tarjeta de Crédito</label>
-                <input type="text" class="form-control" id="cardNumber" maxlength="16" placeholder="XXXX XXXX XXXX XXXX" required pattern="\d{16}" title="El número de tarjeta debe tener 16 dígitos">
-              </div>
-        
-              <!-- Fecha de expiración -->
-              <div class="row">
-                <div class="col-md-6 mb-3">
-                  <label for="expiryDate" class="form-label">Fecha de Expiración</label>
-                  <input type="text" class="form-control" id="expiryDate" placeholder="MM/YY" required pattern="\d{2}/\d{2}" title="El formato debe ser MM/YY">
-                </div>
-        
-                <!-- Código CVV -->
-                <div class="col-md-6 mb-3">
-                  <label for="cvv" class="form-label">Código CVV</label>
-                  <input type="text" class="form-control" id="cvv" placeholder="CVV" required pattern="\d{3,4}" title="El CVV debe tener 3 o 4 dígitos">
-                </div>
-              </div>
-         
-              <div class="search-container">
-                <div class="colorElementos">
-                    <a href="confirm.html" style="text-decoration: none;">
-                        <button class="search-button" type="button" style="width: 100%;">Confirmar</button>
-                    </a>
-                </div>
-            </div>
-            
-            </form>
+<div class="credit-container">
+  <div class="credit-card-wrapper">
+    <!-- Tarjeta de crédito visual -->
+    <div class="credit-card" [class]="cardType">
+      <div class="card-header">
+        <div class="card-type-icon">
+          <i [class]="getCardIcon()"></i>
+        </div>
+        <div class="card-chip"></div>
+      </div>
+      <div class="card-number">
+        {{ getDisplayCardNumber() }}
+      </div>
+      <div class="card-footer">
+        <div class="card-holder">
+          <div class="label">TITULAR</div>
+          <div class="value">{{ creditForm.get('cardName')?.value || 'NOMBRE COMPLETO' }}</div>
+        </div>
+        <div class="card-expiry">
+          <div class="label">VÁLIDA HASTA</div>
+          <div class="value">{{ creditForm.get('expiryDate')?.value || 'MM/YY' }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Formulario -->
+  <div class="form-container">
+    <h2 class="form-title">Información de Tarjeta de Crédito</h2>
+    
+    <form [formGroup]="creditForm" (ngSubmit)="onSubmit()" novalidate>
+      <!-- Nombre en la tarjeta -->
+      <div class="form-group">
+        <label for="cardName" class="form-label">
+          <i class="fas fa-user"></i>
+          Nombre en la tarjeta
+        </label>
+        <input 
+          type="text" 
+          class="form-control"
+          [class.is-valid]="isFieldValid('cardName')"
+          [class.is-invalid]="isFieldInvalid('cardName')"
+          id="cardName" 
+          formControlName="cardName"
+          placeholder="Nombre completo como aparece en la tarjeta"
+          autocomplete="cc-name">
+        <div class="error-message" *ngIf="isFieldInvalid('cardName')">
+          {{ getErrorMessage('cardName') }}
+        </div>
+      </div>
+
+      <!-- Número de tarjeta de crédito -->
+      <div class="form-group">
+        <label for="cardNumber" class="form-label">
+          <i class="fas fa-credit-card"></i>
+          Número de Tarjeta de Crédito
+        </label>
+        <input 
+          type="text" 
+          class="form-control"
+          [class.is-valid]="isFieldValid('cardNumber')"
+          [class.is-invalid]="isFieldInvalid('cardNumber')"
+          id="cardNumber" 
+          placeholder="1234 5678 9012 3456"
+          maxlength="19"
+          (input)="formatCardNumber($event)"
+          autocomplete="cc-number">
+        <div class="error-message" *ngIf="isFieldInvalid('cardNumber')">
+          {{ getErrorMessage('cardNumber') }}
+        </div>
+      </div>
+
+      <!-- Fecha de expiración y CVV -->
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="expiryDate" class="form-label">
+            <i class="fas fa-calendar-alt"></i>
+            Fecha de Expiración
+          </label>
+          <input 
+            type="text" 
+            class="form-control"
+            [class.is-valid]="isFieldValid('expiryDate')"
+            [class.is-invalid]="isFieldInvalid('expiryDate')"
+            id="expiryDate" 
+            placeholder="MM/YY"
+            maxlength="5"
+            (input)="formatExpiryDate($event)"
+            autocomplete="cc-exp">
+          <div class="error-message" *ngIf="isFieldInvalid('expiryDate')">
+            {{ getErrorMessage('expiryDate') }}
           </div>
-        
+        </div>
+
+        <div class="form-group col-md-6">
+          <label for="cvv" class="form-label">
+            <i class="fas fa-lock"></i>
+            Código CVV
+            <span class="cvv-help" title="Código de seguridad de 3 o 4 dígitos">?</span>
+          </label>
+          <input 
+            type="text" 
+            class="form-control"
+            [class.is-valid]="isFieldValid('cvv')"
+            [class.is-invalid]="isFieldInvalid('cvv')"
+            id="cvv" 
+            placeholder="123"
+            maxlength="4"
+            (input)="onCvvInput($event)"
+            autocomplete="cc-csc">
+          <div class="error-message" *ngIf="isFieldInvalid('cvv')">
+            {{ getErrorMessage('cvv') }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Información de seguridad -->
+      <div class="security-info">
+        <i class="fas fa-shield-alt"></i>
+        <span>Tu información está protegida con cifrado SSL de 256 bits</span>
+      </div>
+
+      <!-- Botón de envío -->
+      <div class="form-actions">
+        <button 
+          type="submit" 
+          class="btn btn-primary btn-lg"
+          [disabled]="isSubmitting"
+          [class.loading]="isSubmitting">
+          <span *ngIf="!isSubmitting">
+            <i class="fas fa-lock"></i>
+            Confirmar Pago Seguro
+          </span>
+          <span *ngIf="isSubmitting">
+            <i class="fas fa-spinner fa-spin"></i>
+            Procesando...
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

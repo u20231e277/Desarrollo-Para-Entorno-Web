@@ -23,6 +23,8 @@ import { CommonModule } from '@angular/common';
 import { Reserva2Component } from './pages/reserva2/reserva2.component';
 import { ReservaComponent } from './pages/reserva/reserva.component';
 import { RouterModule } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
+
 
 
 @NgModule({
@@ -52,7 +54,8 @@ import { RouterModule } from '@angular/router';
     MatInputModule,
     MatNativeDateModule,
     CommonModule ,
-    RouterModule    
+    RouterModule,
+    ReactiveFormsModule
     
   ],
   providers: [],
