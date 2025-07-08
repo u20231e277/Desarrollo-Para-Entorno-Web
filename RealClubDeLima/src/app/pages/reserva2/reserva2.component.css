@@ -108,3 +108,20 @@
   font-weight: bold;
   text-align: center;
 }
+.btn-ir-reserva {
+  display: block;
+  margin-top: 12px;
+  padding: 10px 20px;
+  background-color: #14274a;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+.btn-ir-reserva:hover {
+  background-color: #14274a;
+}
