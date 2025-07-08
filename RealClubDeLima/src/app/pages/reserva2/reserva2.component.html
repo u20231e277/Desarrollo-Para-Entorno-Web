@@ -1,0 +1,29 @@
+<ng-template #noReservas>
+  <p>No tienes reservas registradas.</p>
+</ng-template>
+
+<div class="reserva-container">
+  <h2 class="titulo">Mis Reservas Confirmadas</h2>
+
+  <div *ngIf="reservas.length === 0" class="mensaje-vacio">
+    No tienes reservas registradas.
+  </div>
+
+  <div *ngFor="let reserva of reservas" class="reserva-card">
+    <img [src]="obtenerImagen(reserva.area)" alt="Imagen del ambiente" class="reserva-imagen">
+    <div class="reserva-detalles">
+      <h3>{{ obtenerNombreArea(reserva.area) }}</h3>
+      <p><strong>Fecha:</strong> {{ reserva.fecha }}</p>
+      <p><strong>Horario:</strong> {{ reserva.horaInicio }} – {{ reserva.horaFin }}</p>
+      <!-- Solo el botón navega -->
+      <button
+        routerLink="/reserva"
+        class="btn-ir-reserva"
+      >
+        Detalle de Reserva
+      </button>
+    </div>
+  </div>
+</div>
+
+

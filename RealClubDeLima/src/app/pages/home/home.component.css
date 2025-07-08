@@ -1,0 +1,255 @@
+/* .calendar-container { 
+  margin-top: 2rem;
+  height: 600px;
+}
+
+::ng-deep .fc {
+  max-width: 100%;
+  margin: auto;
+}*/
+.input-fecha {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+.form-group {
+  margin-bottom: 1rem;
+}
+.hidden-calendar {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+::ng-deep .fc {
+  font-family: sans-serif;
+  font-size: 12px;
+}
+
+.calendar-container {
+  margin-top: 10px;
+}
+.dropdown-button {
+  background-color: white;
+  border: 1px solid #e2a30e;
+  border-radius: 5px;
+  padding: 6px 10px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  color: #333;
+  margin-top: 5px;
+}
+
+.horarios-list { 
+  padding:0; list-style:none; display:flex; flex-wrap:wrap; gap:10px; }
+.horarios-list li { margin:0; }
+
+.horario-btn {
+  padding:6px 10px; border-radius:6px; font-size:14px; font-weight:bold;
+  border:1px solid transparent; cursor:pointer; min-width:75px;
+}
+
+/* .disponible { background:#d4edda; color:#155724; border-color:#c3e6cb; }
+.ocupado    { background:#f8d7da; color:#721c24; border-color:#f5c6cb; cursor:not-allowed; } */
+
+.horario-btn.disponible {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.horario-btn.ocupado {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+dialog {
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+
+dialog.fade-out {
+  opacity: 0;
+}
+.temporizador {
+  margin: 10px 0;
+  padding: 6px 12px;
+  background: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+  border-radius: 4px;
+  font-weight: 600;
+  display: inline-block;
+}
+/* Contenedor principal */
+.invites {
+  margin-top: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Cabecera (Invitados + flecha) */
+.invites .dropdown {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  cursor: pointer;
+  background: #fdfdfd;
+  border-bottom: 1px solid #eee;
+}
+
+.invites .dropdown:hover {
+  background: #f5f5f5;
+}
+
+.invites .arrow {
+  transition: transform 0.3s ease;
+  font-size: 1.2rem;
+  color: #e2a30e;
+}
+
+.invites .arrow.rotated {
+  transform: rotate(180deg);
+}
+.contador-invitados {
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: green;
+  transition: color 0.3s ease;
+}
+
+.contador-invitados.maximo {
+  color: red; /* Cambia a rojo cuando llegas al límite */
+}
+/* Contenido plegable */
+.add-invitados {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.4s ease;
+}
+
+.add-invitados.open {
+  max-height: 200px;
+  padding: 10px;
+}
+
+.add-invitados button {
+  width: 30px;
+  height: 30px;
+  margin: 0 5px;
+  font-weight: bold;
+}
+
+/* Controles de adultos/niños */
+.add-invitados div {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  margin: 5px 0;
+}
+.add-invitados span {
+  margin: 0 5px; /* espacio mínimo entre botones y número */
+  font-size: 16px;
+  font-weight: bold;
+  min-width: 20px;
+  text-align: center;
+}
+
+.add-invitados button {
+  width: 30px;
+  height: 30px;
+  border: none;
+  background-color: #e2a30e;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-invitados button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.add-invitados button:not(:disabled):hover {
+  background-color: #c78f0b;
+}
+.dropdown-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #f7f7f7;
+  border-radius: 6px;
+  font-weight: bold;
+  color: #333;
+}
+
+.dropdown-header strong {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.dropdown-header .resumen-invitados {
+  font-size: 12px;
+  color: #888;
+}
+
+.dropdown-header .arrow {
+  font-size: 16px;
+  color: #e2a30e;
+  transition: transform 0.3s ease;
+}
+
+.dropdown-header .arrow.open {
+  transform: rotate(180deg); /* Flecha apunta arriba cuando está abierto */
+}
+.dropdown-fecha {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  background-color: #fdfdfd;
+  cursor: pointer;
+  position: relative;
+}
+
+.input-fecha {
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  text-align: right;
+  outline: none;
+  color: #444;
+}
+.arrow {
+  font-size: 12px;
+  color: #e2a30e;
+  transition: transform 0.3s ease;
+}
+
+.arrow.abierto {
+  transform: rotate(180deg);
+}
+
+.calendario {
+  padding: 8px;
+  border-top: 1px solid #ddd;
+  background-color: #fff;
+}
+
+.calendario input[type="date"] {
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 5px;
+}

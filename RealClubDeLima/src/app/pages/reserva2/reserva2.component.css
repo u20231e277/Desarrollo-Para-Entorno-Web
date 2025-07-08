@@ -1,0 +1,127 @@
+.reserva-container {
+  padding: 1rem;
+  font-family: Arial, sans-serif;
+}
+
+.titulo {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #001f4d;
+  text-align: center;
+}
+
+.mensaje-vacio {
+  text-align: center;
+  color: #888;
+  font-style: italic;
+}
+
+.reserva-card {
+  display: flex;
+  align-items: center;
+  background: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.reserva-imagen {
+  width: 120px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-right: 1rem;
+}
+
+.reserva-detalles {
+  flex-grow: 1;
+}
+
+.reserva-detalles h3 {
+  margin: 0 0 0.5rem 0;
+  color: #003366;
+}
+
+.btn-cancelar {
+  background-color: #d9534f;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-cancelar:hover {
+  background-color: #c9302c;
+}
+
+.btn-cancelar1 {
+  background-color: #14274a;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-cancelar1:hover {
+  background-color: #14274a;
+}
+.dialogo-cancelar {
+  border: none;
+  border-radius: 8px;
+  padding: 20px;
+  width: 300px;
+  text-align: center;
+}
+
+.botones-modal {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.btn-confirmar {
+  background-color: #ffffff;
+  color: #14274a;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-cerrar {
+  background-color: #6c757d;
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.mensaje-exito {
+  margin-top: 10px;
+  color: #14274a;
+  font-weight: bold;
+  text-align: center;
+}
+.btn-ir-reserva {
+  display: block;
+  margin-top: 12px;
+  padding: 10px 20px;
+  background-color: #14274a;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+.btn-ir-reserva:hover {
+  background-color: #14274a;
+}

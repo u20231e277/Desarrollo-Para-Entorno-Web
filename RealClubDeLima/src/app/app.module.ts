@@ -10,7 +10,22 @@ import { InicioComponent } from './pages/inicio/inicio.component';
 import { ConfirmComponent } from './pages/confirm/confirm.component';
 import { ConfirmacionComponent } from './pages/confirmacion/confirmacion.component';
 import { CreditComponent } from './pages/credit/credit.component';
-import { LoginComponent } from './pages/login/login.component';
+import { FullCalendarModule } from '@fullcalendar/angular';
+import { FormsModule } from '@angular/forms';
+import { HomeComponent } from './pages/home/home.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core';
+import { FooterComponent } from './pages/footer/footer.component';
+import { CommonModule } from '@angular/common';
+import { Reserva2Component } from './pages/reserva2/reserva2.component';
+import { ReservaComponent } from './pages/reserva/reserva.component';
+import { RouterModule } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
+
+
 
 @NgModule({
   declarations: [
@@ -21,12 +36,27 @@ import { LoginComponent } from './pages/login/login.component';
     ConfirmComponent,
     ConfirmacionComponent,
     CreditComponent,
-    LoginComponent
+    HomeComponent,
+    FooterComponent,
+    Reserva2Component,
+    ReservaComponent
+    
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    FullCalendarModule,
+    FormsModule,
+    BrowserAnimationsModule,
+     MatDatepickerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatNativeDateModule,
+    CommonModule ,
+    RouterModule,
+    ReactiveFormsModule
+    
   ],
   providers: [],
   bootstrap: [AppComponent]
