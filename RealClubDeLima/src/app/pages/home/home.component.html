@@ -42,14 +42,13 @@
   </button>
 </div>
         <ul class="area-list">
-  <li *ngFor="let area of areasFiltradas">
+  <li *ngFor="let area of ambientes">
     <label>
       <input
         type="radio"
         name="area"
-        [attr.data-id]="area.id"
+        [value]="area.idambiente"
         [(ngModel)]="areaSeleccionada"
-        [value]="area.id"
       />
       <span class="radio-custom"></span>
       {{ area.nombre }}

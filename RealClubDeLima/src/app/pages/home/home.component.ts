@@ -1,9 +1,7 @@
+import { NgFor } from '@angular/common';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { CalendarOptions } from '@fullcalendar/core';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import interactionPlugin from '@fullcalendar/interaction';
-import esLocale from '@fullcalendar/core/locales/es'; // español
+import { AmbientesService } from 'src/app/services/ambientes.service';
 
 declare global {
   interface Window {
@@ -13,12 +11,14 @@ declare global {
 
 @Component({
   selector: 'app-home',
+  // standalone: false,
+  // imports: [NgFor],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
 
-  areaSeleccionada: string = '';
+ 
   fechaInicial: string = '';
   fechaFinal: string = '';
   adultos: number = 0;
@@ -30,6 +30,7 @@ export class HomeComponent implements OnInit {
   textoBusqueda: string = '';
   areasDisponibles: any[] = [];
   areasFiltradas: any[] = [];
+  areaSeleccionada: string = '';
 
   //Reservas
   horariosDisponibles: { start: string; end: string }[] = [];
@@ -41,17 +42,30 @@ export class HomeComponent implements OnInit {
   countdown    = 300;      // 5 min en segundos
   private timerID: any;    // referencia al setInterval
 
-  constructor(private router: Router) {}
+  constructor(private router: Router,
+    private readonly ps: AmbientesService
+  ) {}
+
+  ambientes: any[] = [];
+
+  __listar_Ambientes(){
+    this.ps.__be_getAmbientes().subscribe((rest: any) => {
+      this.ambientes = rest.data
+      console.log(this.ambientes)
+    })
+  }
 
   ngOnInit(): void {
-    
-    if (window.DATA && window.DATA.ambientes) {
-      this.areasDisponibles = window.DATA.ambientes;
-      this.areasFiltradas = [...this.areasDisponibles];
-      //console.log("Áreas cargadas:", this.areasDisponibles);
-    } else {
-      console.error('No se encontró window.DATA.ambientes');
-    }
+
+    this.__listar_Ambientes();
+
+    // if (window.DATA && window.DATA.ambientes) {
+    //   this.areasDisponibles = window.DATA.ambientes;
+       this.areasFiltradas = [...this.areasDisponibles];
+    //   //console.log("Áreas cargadas:", this.areasDisponibles);
+    // } else {
+    //   console.error('No se encontró window.DATA.ambientes');
+    // }
 
     // Cargar reservas
     this.cargarReservas();
