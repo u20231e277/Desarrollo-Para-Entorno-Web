@@ -1,7 +1,9 @@
 import { NgFor } from '@angular/common';
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AmbientesService } from 'src/app/services/ambientes.service';
+import { ReservasService } from 'src/app/services/reservas.service';
 
 declare global {
   interface Window {
@@ -43,7 +45,9 @@ export class HomeComponent implements OnInit {
   private timerID: any;    // referencia al setInterval
 
   constructor(private router: Router,
-    private readonly ps: AmbientesService
+    private readonly ps: AmbientesService,
+    private readonly rs: ReservasService,
+    private fb: FormBuilder,
   ) {}
 
   ambientes: any[] = [];
@@ -51,8 +55,36 @@ export class HomeComponent implements OnInit {
   __listar_Ambientes(){
     this.ps.__be_getAmbientes().subscribe((rest: any) => {
       this.ambientes = rest.data
-      console.log(this.ambientes)
+      this.areasDisponibles = this.ambientes;            // <-- llena la lista completa
+      this.areasFiltradas = [...this.areasDisponibles];
+      console.log("Áreas cargadas:", this.areasDisponibles);
     })
+  }
+
+  reservaForm = this.fb.group({
+    idusuario: ['', Validators.required],
+    idambiente: ['', Validators.required],
+    fecha: ['', Validators.required],
+    hora_inicio: ['', Validators.required],
+    hora_fin: ['', Validators.required],
+    adultos: ['', Validators.required],
+    ninos: ['', Validators.required],
+  });
+
+  __insert(data: any){
+    this.rs.__be_postreservas(data).subscribe((rest: any) => {
+      console.log(rest)
+      this.router.navigate(['reserva']);
+    })
+  }
+
+  __onSubmit(){
+    if(this.reservaForm.valid){
+      this.__insert(this.reservaForm.value);
+      return true;
+    }else{
+      return false;
+    }
   }
 
   ngOnInit(): void {
@@ -149,20 +181,6 @@ buscarReservas(): void {
     this.filtrarHorariosOcupados();
   }
 
-//  generarHorarios(): void {
-//     this.horariosDisponibles = [];
-//     const inicio = new Date(`${this.fechaInicial}T07:00`);
-//     const fin = new Date(`${this.fechaInicial}T21:00`);
-
-//     while (inicio < fin) {
-//       const start = inicio.toTimeString().substring(0, 5);
-//       const siguiente = new Date(inicio.getTime() + 75 * 60000); // 1h + 15min
-//       const end = siguiente.toTimeString().substring(0, 5);
-
-//       this.horariosDisponibles.push({ start, end });
-//       inicio.setTime(siguiente.getTime());
-//     }
-//   }
 
 generarHorarios(): void {
   this.horariosDisponibles = [];
@@ -206,22 +224,6 @@ generarHorarios(): void {
     modal.showModal();
     }
   }
-
-// generarTurnos() {
-//   const lista:{start:string,end:string}[] = [];
-//   const base = new Date('1970-01-01T07:00:00');
-//   const FIN  = new Date('1970-01-01T20:15:00');        // último inicio
-
-//   while (base <= FIN) {
-//     const start = base.toTimeString().substring(0,5);  // HH:MM
-//     const fin   = new Date(base.getTime() + 60*60*1000); // +1 h
-//     const end   = fin.toTimeString().substring(0,5);
-
-//     lista.push({ start, end });
-//     base.setMinutes(base.getMinutes() + 75);           // +1 h 15 min
-//   }
-//   return lista;
-// }
 
 confirmarReserva(): void {
   if (this.horarioSeleccionado) {

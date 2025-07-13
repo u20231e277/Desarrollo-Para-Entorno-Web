@@ -9,7 +9,7 @@
     No tienes reservas registradas.
   </div>
 
-  <div *ngFor="let reserva of reservas" class="reserva-card">
+  <div *ngFor="let reserva of reserva" class="reserva-card">
     <img [src]="obtenerImagen(reserva.area)" alt="Imagen del ambiente" class="reserva-imagen">
     <div class="reserva-detalles">
       <h3>{{ obtenerNombreArea(reserva.area) }}</h3>

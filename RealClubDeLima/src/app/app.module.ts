@@ -24,6 +24,7 @@ import { Reserva2Component } from './pages/reserva2/reserva2.component';
 import { ReservaComponent } from './pages/reserva/reserva.component';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
+import { LoginComponent } from './pages/login/login.component';
 
 
 
@@ -39,7 +40,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     HomeComponent,
     FooterComponent,
     Reserva2Component,
-    ReservaComponent
+    ReservaComponent,
+    LoginComponent
     
   ],
   imports: [

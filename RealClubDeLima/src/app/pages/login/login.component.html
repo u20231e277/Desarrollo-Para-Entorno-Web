@@ -1,28 +1,63 @@
-        <div class="logeo">
-            <form method="post">
-                <div class="centrarElementosHorizontal">
-                    <h1 class="mensajesGrandes">Iniciar Sesión</h1>
-                    <h6 class="mensajesPequeños3">Hola! Bienvenido de nuevo, te hemos extrañado</h6>
-                </div>
-                <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label"><h2 class="mensajesNormales">Código / Correo</h2></label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                    <!--<div class="mensajesPequeños1"><p >We'll never share your email with anyone else.</p></div>-->
-                </div>
-                <div class="mb-3">
-                    <label for="exampleInputPassword1" class="form-label"><h2 class="mensajesNormales">Contraseña</h2></label>
-                    <input type="password" class="form-control" id="exampleInputPassword1">
-                </div>
-                    <div class="mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                    <label class="form-check-label" for="exampleCheck1"><p class="mensajesPequeños2">Recordamelo</p></label>
-                </div>
-                <div class="search-container">
-                    <div class="colorElementos">
-                        <a href="credit.html" style="text-decoration: none;">
-                            <button class="search-button" type="button" onclick="guardar()" style="width: 100%;">Ingresar</button>
-                        </a>
-                    </div>
-                </div> 
-            </form>
+<div class="login-container">
+  <div class="login-card animate-fade">
+    <div class="login-header">
+      <h1 class="login-title">Iniciar Sesión</h1>
+      <p class="login-subtitle">¡Bienvenido de nuevo!</p>
+    </div>
+
+    <form (submit)="login($event)">
+      <div class="form-group">
+        <label for="codigo" class="form-label">Código</label>
+        <input type="text" id="codigo" class="form-input"
+          placeholder="Ingresa tu código de asociado"
+          [(ngModel)]="codigo"
+          name="codigo"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password" class="form-label">Contraseña</label>
+        <input
+          type="password"
+          id="password"
+          class="form-input"
+          placeholder="Ingresa tu contraseña"
+          [(ngModel)]="password"
+          name="password"
+          required
+          [ngClass]="{ 'input-error': loginFallido }"
+        />
+
+        <!-- Mensaje de error debajo -->
+        <div *ngIf="loginFallido" class="error-message animate-shake">
+          {{ mensajeError }}
         </div>
+      </div>
+
+      
+
+      <div class="form-remember">
+        <input type="checkbox" id="remember" />
+        <label for="remember">Recordarme</label>
+      </div>
+
+      <button
+        type="submit"
+        class="btn-login"
+        [disabled]="isLoading"
+      >
+        <span *ngIf="!isLoading">Ingresar</span>
+        <span *ngIf="isLoading" class="spinner"></span>
+      </button>
+    </form>
+
+    <p class="login-footer">© 2024 Real Club de Lima. Todos los derechos reservados.</p>
+  </div>
+</div>
+
+<dialog id="errorModal" class="modal">
+  <h3>❌ Error</h3>
+  <p>{{ mensajeError }}</p>
+  <button (click)="cerrarModal()">Cerrar</button>
+</dialog>

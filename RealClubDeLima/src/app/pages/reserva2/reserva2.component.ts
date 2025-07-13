@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ReservasService } from 'src/app/services/reservas.service';
 
 declare global {
   interface Window {
@@ -14,7 +15,31 @@ declare global {
 })
 export class Reserva2Component implements OnInit {
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, 
+    private readonly rs: ReservasService,
+    private ar: ActivatedRoute) { }
+
+    reserva: any = []
+
+    __obtener_reservas(id: any){
+      this.rs.__be_getreserva(id).subscribe((rest: any) => {
+      this.reserva = rest.data
+      console.log(this.reserva)
+      })
+    }
+
+    ngOnInit(): void {
+    this.ar.params.subscribe((params: Params) => {
+      if(params["idusuario"]) {
+        this.__obtener_reservas(params["idusuario"])
+      }
+    })
+  }
+
+
+
+
+
   reservas: any[] = [];
   areasDisponibles: any[] = [];
   ambientes: any[] = [];
@@ -23,16 +48,16 @@ export class Reserva2Component implements OnInit {
 
   
 
-  ngOnInit(): void {
-    // Cargar áreas desde window.DATA
-    if (window.DATA && window.DATA.ambientes) {
-      this.areasDisponibles = window.DATA.ambientes;
-    }
+  // ngOnInit(): void {
+  //   // Cargar áreas desde window.DATA
+  //   if (window.DATA && window.DATA.ambientes) {
+  //     this.areasDisponibles = window.DATA.ambientes;
+  //   }
 
-    // Leer reservas desde localStorage
-    const data = localStorage.getItem('reservas');
-    this.reservas = data ? JSON.parse(data) : [];
-  }
+  //   // Leer reservas desde localStorage
+  //   const data = localStorage.getItem('reservas');
+  //   this.reservas = data ? JSON.parse(data) : [];
+  // }
 
 obtenerImagen(id: any): string {
   const idStr = String(id);  // convierte a string por si es número

@@ -20,7 +20,7 @@ const routes: Routes = [
   { path: 'credit', component: CreditComponent },
   { path: 'home', component: HomeComponent },
   {path: 'login', component: LoginComponent},
-  {path: 'reserva2', component: Reserva2Component},
+  {path: 'reserva2/:idusuario', component: Reserva2Component},
   {path: 'reserva', component: ReservaComponent}
 ];
 
