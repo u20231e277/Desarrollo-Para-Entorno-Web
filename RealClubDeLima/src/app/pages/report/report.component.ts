@@ -119,7 +119,7 @@ export class ReportComponent implements OnInit {
 
     // márgenes
     const yLblW = ctx.measureText(maxY.toString()).width;
-    const margin = { top: 20, right: 20, bottom: 40 + legendH, left: yLblW + 15 };
+    const margin = { top: 20, right: 20, bottom: 40 + legendH, left: yLblW + 20 };
     const plotW = canvas.width - margin.left - margin.right;
     const plotH = canvas.height - margin.top - margin.bottom;
 
@@ -147,7 +147,7 @@ export class ReportComponent implements OnInit {
     ctx.save();
     ctx.translate(10, margin.top + plotH / 2);
     ctx.rotate(-Math.PI / 2);
-    ctx.fillText('Reservas', 0, 0);
+    ctx.fillText('Reservas', 0, 10);
     ctx.restore();
 
     // series
@@ -194,7 +194,7 @@ export class ReportComponent implements OnInit {
   const yLblW = ctx.measureText(maxY.toString()).width;
 
   // ahora las etiquetas X son números → no necesitamos rotar
-  const margin = { top: 20, right: 20, bottom: 50, left: yLblW + 15 };
+  const margin = { top: 20, right: 20, bottom: 50, left: yLblW + 20 };
   const plotW  = canvas.width  - margin.left - margin.right;
   const plotH  = canvas.height - margin.top  - margin.bottom;
 
@@ -234,7 +234,7 @@ export class ReportComponent implements OnInit {
     margin.left + plotW / 2 - 15,
     margin.top + plotH + 34);
   ctx.save(); ctx.translate(10, margin.top + plotH / 2);
-  ctx.rotate(-Math.PI / 2); ctx.fillText('Reservas', 0, 0); ctx.restore();
+  ctx.rotate(-Math.PI / 2); ctx.fillText('Reservas', 0, 10); ctx.restore();
 
   // ─── leyenda numérica debajo del canvas ──────────────────────────────────
   const xLegend = document.getElementById('xLegend');
