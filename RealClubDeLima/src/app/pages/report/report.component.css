@@ -36,7 +36,8 @@
 .chart-wrapper {
   width: 100%;         /* ocupa todo el ancho del padre (360 px en móvil) */
   max-width: 900px;    /* tope opcional para desktop                      */
-  margin: 0 auto;      /* centra en desktop                               */
+  margin: 0 auto;      /* centra en desktop                               */ 
+  
 }
 
 /* el canvas hereda ese 100 % de ancho */

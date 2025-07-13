@@ -14,16 +14,7 @@ export class ReportComponent implements OnInit {
   // -------------------------------------------------------------------------
   // 1. Datos
   // -------------------------------------------------------------------------
-  areas = [
-    { nombre: 'CANCHA 01 - TENIS DE CAMPO', selected: false },
-    { nombre: 'CANCHA 02 - TENIS DE CAMPO', selected: false },
-    { nombre: 'CANCHA DE FUTBOL 12 PERSONAS', selected: false },
-    { nombre: 'CANCHA DE FUTBOL 6 PERSONAS', selected: false },
-    { nombre: 'PISCINA DE NATACION PROFESIONAL', selected: false },
-    { nombre: 'PISCINA DE RELAJO 2024 - J65', selected: false },
-    { nombre: 'CANCHA DE BASKETBALL 2024 RENOVADO', selected: false },
-    { nombre: 'CANCHA DE BASKETBALL - 4 INVITADOS MAX', selected: false }
-  ];
+  areas: { nombre: string; selected: boolean }[] = [];
 
   data?: ReservationData;
   seleccionadas: string[] = [];
@@ -50,14 +41,27 @@ export class ReportComponent implements OnInit {
 
   // -------------------------------------------------------------------------
   ngOnInit() {
-    this.http.get<ReservationData>('assets/data/reservations.json')
-      .subscribe(d => {
-        this.data = d;
-        this.calcularTotales();
-        this.seleccionadas = this.areas.map(a => a.nombre);
-        this.dibujarLineas();
-        this.dibujarHistograma();
-      });
+    const endpoint = 'https://9ceoxvw7mb.execute-api.us-east-1.amazonaws.com/realClubLima/reporte';
+
+    this.http.get<any>(endpoint, {
+        params: { meses: 6, soloConfirmada: 1 }
+    }).subscribe(res => {
+
+      /* --------- 1. desempaquetar posible wrapper de API Gateway --------- */
+      const payload: ReservationData =
+        res && res.body ? JSON.parse(res.body) : (res as ReservationData);
+
+      /* --------- 2. guardar datos y construir selector dinámico ---------- */
+      this.data  = payload;
+      this.areas = this.data.areas.map(a => ({ nombre: a.nombre, selected: false }));
+
+      /* --------- 3. seleccionar todas por defecto y dibujar --------------- */
+      this.seleccionadas = this.areas.map(a => a.nombre);
+
+      this.calcularTotales();
+      this.dibujarLineas();
+      this.dibujarHistograma();
+    });
   }
 
   // -------------------------------------------------------------------------
