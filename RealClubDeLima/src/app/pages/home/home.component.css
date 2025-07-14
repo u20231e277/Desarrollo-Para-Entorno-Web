@@ -45,6 +45,30 @@
   margin-top: 5px;
 }
 
+.horario {
+  padding: 10px;
+  margin: 5px;
+  border-radius: 5px;
+  color: white;
+  text-align: center;
+  cursor: pointer;
+}
+.horario.libre {
+  background-color: #4caf50; /* Verde */
+  color: white;
+}
+.horario.bloqueado {
+  background-color: #ffc107; /* Amarillo */
+  color: black;
+}
+.horario.confirmado {
+  background-color: #f44336; /* Rojo */
+  color: white;
+}
+.horario:hover {
+  opacity: 0.8;
+}
+
 .horarios-list { 
   padding:0; list-style:none; display:flex; flex-wrap:wrap; gap:10px; }
 .horarios-list li { margin:0; }

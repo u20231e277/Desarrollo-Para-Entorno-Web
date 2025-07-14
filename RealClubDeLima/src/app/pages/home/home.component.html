@@ -46,7 +46,7 @@
     <label>
       <input
         type="radio"
-        name="area"
+        name="idambiente"
         [value]="area.idambiente"
         [(ngModel)]="areaSeleccionada"
       />
@@ -134,7 +134,7 @@
       </section>
 
       <section class="search-container">
-        <button class="search-button" (click)="buscarReservas()">
+        <button class="search-button" (click)="buscarHorarios()">
           <svg
             viewBox="0 0 24 24"
             fill="none"
@@ -149,24 +149,65 @@
           Buscar reservas          
         </button>
 
-        <div class="containner-results" *ngIf="horariosDisponibles.length">
+        <div class="containner-results" *ngIf="horarios.length">
 
   <h3>Horarios disponibles:</h3>
 
-  <ul class="horarios-list">
+  <!-- <ul class="horarios-list">
     <li *ngFor="let h of horariosDisponibles">
       <button
         class="horario-btn"
-        [ngClass]="{
-          disponible: !horariosOcupados.includes(h.start),
-          ocupado   :  horariosOcupados.includes(h.start)
+        [ngClass]="{ 'ocupado': horariosOcupados.includes(h.start), 'disponible': !horariosOcupados.includes(h.start)
         }"
-        [disabled]="horariosOcupados.includes(h.start)"
+        
         (click)="seleccionarHorario(h)">
         {{ h.start }} – {{ h.end }}
       </button>
     </li>
-  </ul>
+  </ul> -->
+  <!-- <ul class="horarios-list">
+    <li *ngFor="let h of horariosDisponibles">
+      <button
+        class="horario-btn"
+        [ngClass]="{ 'ocupado': horariosOcupados.includes(h.start), 'disponible': !horariosOcupados.includes(h.start)
+        }"
+        
+        (click)="seleccionarHorario(h)">
+        {{ h.start }} – {{ h.end }}
+      </button>
+    </li>
+  </ul> -->
+
+  <!-- <div class="horarios-container">
+  <button
+    *ngFor="let h of horarios"
+    class="horario-btn"
+    [ngClass]="{
+      'libre': h.estado === 'libre',
+      'pendiente': h.estado === 'pendiente',
+      'confirmado': h.estado === 'confirmado'
+    }"
+    [disabled]="h.estado !== 'libre'"
+    (click)="seleccionarHorario(h)"
+  >
+    {{ h.hora_inicio }} - {{ h.hora_fin }}
+  </button>
+</div> -->
+
+
+<div class="horarios-list">
+  <div *ngFor="let horario of horarios"
+     class="horario"
+     [ngClass]="{
+       'libre': horario.estado === 'libre',
+       'bloqueado': horario.estado === 'bloqueado',
+       'confirmado': horario.estado === 'confirmado'
+     }"
+     (click)="seleccionarHorario(horario)">
+  {{ horario.hora_inicio }} - {{ horario.hora_fin }}
+</div>
+</div>
+
 
 </div>
 
@@ -181,6 +222,13 @@
     <button id="cancel-button">No</button>
   </div>
 </dialog>
+
+<!-- <dialog id="dialogConfirmation">
+  <h2>Confirmar reserva</h2>
+  <p>¿Quieres reservar el horario <span id="selected-time"></span>?</p>
+  <button (click)="confirmarReserva()">✅ Si</button>
+  <button id="cancel-button">❌ No</button>
+</dialog> -->
 
     <dialog id="dialogError">
       <h2>Info!</h2>

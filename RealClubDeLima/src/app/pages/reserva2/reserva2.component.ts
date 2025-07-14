@@ -1,12 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { ReservasService } from 'src/app/services/reservas.service';
-
-declare global {
-  interface Window {
-    DATA: any;
-  }
-}
 
 @Component({
   selector: 'app-reserva2',
@@ -14,119 +8,78 @@ declare global {
   styleUrls: ['./reserva2.component.css']
 })
 export class Reserva2Component implements OnInit {
+  reservas: any[] = [];             // Lista de reservas del usuario
+  cargando: boolean = true;         // Loader mientras carga
+  mensaje: string = '';             // Mensaje si no hay reservas o error
+  // reservaSeleccionada: any = null;  // Para el modal de cancelación
+   idReservaSeleccionada: number | null = null; // Guarda la reserva que se desea cancelar
 
-  constructor(private router: Router, 
-    private readonly rs: ReservasService,
-    private ar: ActivatedRoute) { }
+  constructor(private rs: ReservasService, private router: Router) {}
+  
+  ngOnInit(): void {
+        const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+    if (!usuario.idusuario) {
+      this.mensaje = 'No se encontró un usuario logueado.';
+      this.cargando = false;
+      return;
+  }
 
-    reserva: any = []
+this.rs.__be_getobtenerReservas(usuario.idusuario).subscribe({
+      next: (response) => {
+        console.log('Respuesta completa:', response);
 
-    __obtener_reservas(id: any){
-      this.rs.__be_getreserva(id).subscribe((rest: any) => {
-      this.reserva = rest.data
-      console.log(this.reserva)
-      })
-    }
+        const parsedResponse = typeof response.data === 'string'
+          ? JSON.parse(response.data)
+          : response;
 
-    ngOnInit(): void {
-    this.ar.params.subscribe((params: Params) => {
-      if(params["idusuario"]) {
-        this.__obtener_reservas(params["idusuario"])
+        this.reservas = parsedResponse.data || [];
+        if (!this.reservas.length) {
+          this.mensaje = 'No tienes reservas registradas.';
+        }
+        this.cargando = false;
+      },
+      error: (err) => {
+        console.error('Error al obtener reservas:', err);
+        this.mensaje = 'Ocurrió un error al cargar tus reservas.';
+        this.cargando = false;
       }
-    })
+    });
   }
 
-
-
-
-
-  reservas: any[] = [];
-  areasDisponibles: any[] = [];
-  ambientes: any[] = [];
-  reservaPendienteCancelacion: any = null;
-  mensajeCancelacionMostrado: boolean = false;
-
-  
-
-  // ngOnInit(): void {
-  //   // Cargar áreas desde window.DATA
-  //   if (window.DATA && window.DATA.ambientes) {
-  //     this.areasDisponibles = window.DATA.ambientes;
-  //   }
-
-  //   // Leer reservas desde localStorage
-  //   const data = localStorage.getItem('reservas');
-  //   this.reservas = data ? JSON.parse(data) : [];
-  // }
-
-obtenerImagen(id: any): string {
-  const idStr = String(id);  // convierte a string por si es número
-  switch (idStr) {
-    case '1': return 'assets/img/cancha01.jpg';
-    case '2': return 'assets/img/cancha02.jpg';
-    case '3': return 'assets/img/futbol12.jpg';
-    case '4': return 'assets/img/futbol6.jpg';
-    default: return 'assets/img/default.jpg';
-    
-  }
-  
-}
-
-  // getNombreArea(id: string): string {
-  //   const area = this.areasDisponibles.find(a => a.id === id);
-  //   return area ? area.nombre : 'Área desconocida';
-  // }
-
-  obtenerNombreArea(id: string): string {
-  const area = this.areasDisponibles.find(a => a.id == id);
-  return area ? area.nombre : 'Área desconocida';
-}
-
-
-  // cancelarReserva(index: number): void {
-  //   if (confirm('¿Estás seguro de cancelar esta reserva?')) {
-  //     this.reservas.splice(index, 1);
-  //     localStorage.setItem('reservas', JSON.stringify(this.reservas));
-  //   }
-  // }
-  // cancelarReserva(index: number): void {
-  //   if (confirm('¿Deseas cancelar esta reserva?')) {
-  //     this.reservas.splice(index, 1);
-  //     localStorage.setItem('reservas', JSON.stringify(this.reservas));
-  //   }
-  // }
-
-  cancelarReserva(reserva: any): void {
-  this.reservaPendienteCancelacion = reserva;
-  const modal = document.getElementById('dialogCancel') as HTMLDialogElement;
-  modal?.showModal();
-}
-
-confirmarCancelacion(): void {
-  if (this.reservaPendienteCancelacion) {
-    this.reservas = this.reservas.filter(r => r !== this.reservaPendienteCancelacion);
-    localStorage.setItem('reservas', JSON.stringify(this.reservas));
-    this.reservaPendienteCancelacion = null;
-
-    this.mensajeCancelacionMostrado = true; // mostrar mensaje
+  abrirModal(idreserva: number): void {
+    this.idReservaSeleccionada = idreserva; // Guarda el ID
+    const modal = document.getElementById('modalConfirmacion') as HTMLDialogElement;
+    modal?.showModal();
   }
 
-  setTimeout(() => {
-    this.mensajeCancelacionMostrado = false; // ocultar mensaje
-    this.cerrarModal(); // cerrar modal
-  }, 2000);
-}
-
-
-cerrarModal(): void {
-  const modal = document.getElementById('dialogCancel') as HTMLDialogElement;
-  modal?.close();
-}
-
-verDetalle(reserva: any) {
-    /* Navega a /reserva-detalle enviando todo el objeto
-       en el “navigation state”.  Sin tocar nada más.      */
-    this.router.navigate(['reserva'], { state: { reserva } });
+  cerrarModal(): void {
+    const modal = document.getElementById('modalConfirmacion') as HTMLDialogElement;
+    modal?.close();
+    this.idReservaSeleccionada = null;
   }
 
+  verDetalleReserva(reserva: any): void {
+  // Guarda la reserva seleccionada en localStorage
+  localStorage.setItem('reservaSeleccionada', JSON.stringify(reserva));
+  // Redirige a la página de detalles
+  this.router.navigate(['/reserva']);
+}
+
+  // Confirmar cancelación
+ confirmarCancelacion(): void {
+    if (!this.idReservaSeleccionada) return;
+
+    this.rs.__be_CancelarReserva(this.idReservaSeleccionada).subscribe({
+      next: (response) => {
+        console.log('Cancelación exitosa:', response);
+        this.reservas = this.reservas.filter(r => r.idreserva !== this.idReservaSeleccionada);
+        this.cerrarModal();
+      },
+      error: (err) => {
+        console.error('Error al cancelar reserva:', err);
+        alert('❌ Error al cancelar la reserva');
+        this.cerrarModal();
+      }
+    });
+  }
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ReservasService } from 'src/app/services/reservas.service';
 
 @Component({
   selector: 'app-reserva',
@@ -8,30 +9,89 @@ import { Router } from '@angular/router';
 })
 export class ReservaComponent implements OnInit {
 
-  reserva: any | null = null;
-  areasDisponibles: any[] = [];
+  reserva: any = null;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private rs: ReservasService
+  ) {}
 
   ngOnInit(): void {
-
-    /* 1️⃣  history.state funciona en OnInit */
-    this.reserva = history.state['reserva'] ?? null;
-
-    /* 2) Si alguien recarga la página y se pierde el state,
-          intenta reconstruir la reserva leyendo localStorage. */
-    if (!this.reserva) {
-      const data = localStorage.getItem('reservas');
-      const reservas: any[] = data ? JSON.parse(data) : [];
-      this.reserva = reservas[0] ?? null;   // o bien filtra por campos
+    const reservaGuardada = localStorage.getItem('reservaSeleccionada');
+    if (reservaGuardada) {
+      this.reserva = JSON.parse(reservaGuardada);
+    } else {
+      // Redirigir si no hay reserva
+      this.router.navigate(['/reserva2']);
     }
-
-    /* 3) Nombres de áreas si los necesitas */
-    if (window.DATA?.ambientes) this.areasDisponibles = window.DATA.ambientes;
   }
 
-  obtenerNombreArea(id: string): string {
-    const area = this.areasDisponibles.find(a => a.id == id);
-    return area ? area.nombre : 'Área desconocida';
+confirmarReserva(): void {
+  if (!this.reserva?.idreserva) return;
+
+  this.rs.__be_patchconfirmarReserva(this.reserva.idreserva).subscribe({
+    next: (res) => {
+      console.log('Reserva confirmada:', res);
+
+      // 🔄 Actualiza el estado local
+      this.reserva.estado = 'confirmado';
+
+      // ✅ Muestra el modal de éxito
+      this.mostrarDialogo('modalConfirmacion');
+    },
+    error: (err) => {
+      console.error('Error al confirmar reserva:', err);
+
+      // Muestra el modal de error
+      const modalError = document.getElementById('modalError') as HTMLDialogElement;
+      if (modalError) {
+        modalError.showModal();
+      }
+    }
+  });
+}
+
+
+
+cancelarReserva(): void {
+  if (!this.reserva?.idreserva) {
+    console.error('Falta idreserva');
+    alert('❌ No se encontró la información de la reserva');
+    return;
   }
+
+  if (confirm('¿Seguro que deseas cancelar esta reserva?')) {
+    this.rs.__be_CancelarReserva(this.reserva.idreserva).subscribe({
+      next: (response) => {
+        console.log('✅ Reserva cancelada:', response);
+        alert('✅ Reserva cancelada correctamente');
+        this.router.navigate(['/reserva2']); // Redirige a la lista
+      },
+      error: (err) => {
+        console.error('❌ Error al cancelar la reserva:', err);
+        alert('❌ No se pudo cancelar la reserva');
+      }
+    });
+  }
+}
+
+
+
+  volver(): void {
+    this.router.navigate(['/reserva2']);
+  }
+
+  mostrarDialogo(id: string): void {
+    const dlg = document.getElementById(id) as HTMLDialogElement;
+    if (!dlg) return;
+    dlg.showModal();
+    setTimeout(() => dlg.close(), 2000);
+  }
+
+  cerrarModal(): void {
+  const modal = document.getElementById('modalConfirmacion') as HTMLDialogElement;
+  if (modal) {
+    modal.close();
+  }
+}
 }

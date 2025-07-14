@@ -1,29 +1,36 @@
-<ng-template #noReservas>
-  <p>No tienes reservas registradas.</p>
-</ng-template>
-
 <div class="reserva-container">
-  <h2 class="titulo">Mis Reservas Confirmadas</h2>
+  <h2 class="titulo">📋 Mis Reservas</h2>
 
-  <div *ngIf="reservas.length === 0" class="mensaje-vacio">
-    No tienes reservas registradas.
+  <div *ngIf="cargando" class="loader">Cargando tus reservas...</div>
+
+  <div *ngIf="!cargando && mensaje" class="mensaje-vacio">
+    {{ mensaje }}
   </div>
 
-  <div *ngFor="let reserva of reserva" class="reserva-card">
-    <img [src]="obtenerImagen(reserva.area)" alt="Imagen del ambiente" class="reserva-imagen">
-    <div class="reserva-detalles">
-      <h3>{{ obtenerNombreArea(reserva.area) }}</h3>
-      <p><strong>Fecha:</strong> {{ reserva.fecha }}</p>
-      <p><strong>Horario:</strong> {{ reserva.horaInicio }} – {{ reserva.horaFin }}</p>
-      <!-- Solo el botón navega -->
-      <button
-        routerLink="/reserva"
-        class="btn-ir-reserva"
-      >
-        Detalle de Reserva
-      </button>
+  <div *ngIf="!cargando && reservas.length > 0" class="tarjetas">
+    <div *ngFor="let reserva of reservas" class="tarjeta" (click)="verDetalleReserva(reserva)">
+      <img [src]="reserva.imagenurl || 'assets/img/default.jpg'" alt="Ambiente" />
+
+      <div class="tarjeta-contenido">
+        <h3 class="nombre-ambiente">{{ reserva.nombre_ambiente }}</h3>
+        <p class="detalles">
+          📅 Fecha: {{ reserva.fecha | date:'dd/MM/yyyy' }}<br />
+          🕒 Hora: {{ reserva.hora_inicio }} - {{ reserva.hora_fin }}<br />
+          <!-- 👤 Invitados: {{ reserva.adultos }} adultos, {{ reserva.ninos }} niños<br />
+          💵 Total: S/. {{ reserva.costo_total | number:'1.2-2' }} -->
+        </p>
+
+        <span 
+          class="estado" 
+          [ngClass]="{
+            'confirmado': reserva.estado === 'confirmado',
+            'pendiente': reserva.estado === 'pendiente',
+            'cancelado': reserva.estado === 'cancelado'
+          }"
+        >
+          {{ reserva.estado | titlecase }}
+        </span>
+      </div>
     </div>
   </div>
 </div>
-
-

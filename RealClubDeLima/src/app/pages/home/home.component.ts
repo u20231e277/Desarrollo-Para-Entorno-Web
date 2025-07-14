@@ -1,15 +1,16 @@
 import { NgFor } from '@angular/common';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef,  } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AmbientesService } from 'src/app/services/ambientes.service';
 import { ReservasService } from 'src/app/services/reservas.service';
+import { HorariosService } from 'src/app/services/horarios.service';
 
-declare global {
-  interface Window {
-    DATA: any;
-  }
-}
+// declare global {
+//   interface Window {
+//     DATA: any;
+//   }
+// }
 
 @Component({
   selector: 'app-home',
@@ -35,21 +36,29 @@ export class HomeComponent implements OnInit {
   areaSeleccionada: string = '';
 
   //Reservas
+  horarios: any[] = [];
+  horarioSeleccionado: any = null;
+  
+  fechaSeleccionada: string = '';
   horariosDisponibles: { start: string; end: string }[] = [];
   horariosOcupados: string[] = [];
   reservasConfirmadas: any[] = [];
-  horarioSeleccionado: { start: string; end: string } | null = null;
 
   //Temporizador
   countdown    = 300;      // 5 min en segundos
   private timerID: any;    // referencia al setInterval
 
-  constructor(private router: Router,
+  
+
+  constructor(
+    private router: Router,
     private readonly ps: AmbientesService,
     private readonly rs: ReservasService,
-    private fb: FormBuilder,
+    private readonly hs: HorariosService,
+    private cd: ChangeDetectorRef,
   ) {}
 
+  
   ambientes: any[] = [];
 
   __listar_Ambientes(){
@@ -61,46 +70,14 @@ export class HomeComponent implements OnInit {
     })
   }
 
-  reservaForm = this.fb.group({
-    idusuario: ['', Validators.required],
-    idambiente: ['', Validators.required],
-    fecha: ['', Validators.required],
-    hora_inicio: ['', Validators.required],
-    hora_fin: ['', Validators.required],
-    adultos: ['', Validators.required],
-    ninos: ['', Validators.required],
-  });
-
-  __insert(data: any){
-    this.rs.__be_postreservas(data).subscribe((rest: any) => {
-      console.log(rest)
-      this.router.navigate(['reserva']);
-    })
-  }
-
-  __onSubmit(){
-    if(this.reservaForm.valid){
-      this.__insert(this.reservaForm.value);
-      return true;
-    }else{
-      return false;
-    }
-  }
-
+  
   ngOnInit(): void {
 
     this.__listar_Ambientes();
-
-    // if (window.DATA && window.DATA.ambientes) {
-    //   this.areasDisponibles = window.DATA.ambientes;
        this.areasFiltradas = [...this.areasDisponibles];
-    //   //console.log("Áreas cargadas:", this.areasDisponibles);
-    // } else {
-    //   console.error('No se encontró window.DATA.ambientes');
-    // }
 
     // Cargar reservas
-    this.cargarReservas();
+   // this.cargarReservas();
 
     // Iniciar temporizador de 5 min
     this.iniciarTemporizador();
@@ -165,21 +142,86 @@ agregarCero(valor: number): string {
   return valor < 10 ? '0' + valor : valor.toString();
 }
 
-// Buscar reservas
-buscarReservas(): void {
-    if (!this.areaSeleccionada) {
+
+buscarHorarios(): void {
+  if (!this.areaSeleccionada) {
       this.mostrarDialogo('errorSearch');
       return;
     }
-
-    if (!this.fechaInicial || !this.fechaFinal) {
+  
+  if (!this.fechaInicial || !this.fechaFinal) {
       this.mostrarDialogo('errorFechas');
       return;
     }
 
-    this.generarHorarios();
-    this.filtrarHorariosOcupados();
-  }
+  const idambiente = Number(this.areaSeleccionada); // convierte a número
+
+  this.hs.__be_postHorariosConEstado(idambiente, this.fechaInicial).subscribe({
+    next: (response) => {
+      console.log('Horarios obtenidos:', response);
+
+      // Si la API devuelve un string JSON, parsearlo
+      const body = typeof response.body === 'string'
+        ? JSON.parse(response.body)
+        : response.body;
+
+      // Ahora asigna los horarios
+      this.horarios = body.horarios || [];
+
+      console.log('Horarios cargados:', this.horarios);
+      this.cd.detectChanges();
+    },
+    error: (err) => {
+      console.error('Error al obtener horarios:', err);
+      alert('❌ Ocurrió un error al obtener los horarios');
+    }
+  });
+}
+
+
+// Buscar reservas
+// buscarReservas(): void {
+//   if (!this.areaSeleccionada || !this.fechaInicial) {
+//     this.mostrarDialogo('errorSearch');
+//     return;
+//     // alert('Selecciona un área y una fecha para buscar horarios');
+//     // return;
+//   }
+
+//   // Convertir el id del área a number
+//   const idAmbiente = Number(this.areaSeleccionada);
+
+//   this.hs.__be_postHorariosConEstado(idAmbiente, this.fechaInicial)
+//     .subscribe({
+// next: (response) => {
+//   console.log('Horarios obtenidos:', response);
+
+//   const body = JSON.parse(response.body); // Decodifica JSON del body
+//   this.horarios = body.horarios;          // Asigna al array del HTML
+
+//   console.log('Horarios procesados:', this.horarios);
+// },
+//       error: (err) => {
+//         console.error('Error al obtener horarios:', err);
+//         alert('❌ Error al obtener horarios disponibles');
+//       }
+//     });
+// }
+
+// buscarReservas(): void {
+//     if (!this.areaSeleccionada) {
+//       this.mostrarDialogo('errorSearch');
+//       return;
+//     }
+
+//     if (!this.fechaInicial || !this.fechaFinal) {
+//       this.mostrarDialogo('errorFechas');
+//       return;
+//     }
+
+//     this.generarHorarios();
+//     this.filtrarHorariosOcupados();
+//   }
 
 
 generarHorarios(): void {
@@ -206,24 +248,60 @@ generarHorarios(): void {
   }
 }
 
-  seleccionarHorario(horario: { start: string; end: string }): void {
-  const yaReservado = this.reservasConfirmadas.some(r =>
-    r.area === this.areaSeleccionada &&
-    r.fecha === this.fechaInicial
+  // seleccionarHorario(horario: { start: string; end: string }): void {
+  // const yaReservado = this.reservasConfirmadas.some(r =>
+  //   r.area === this.areaSeleccionada &&
+  //   r.fecha === this.fechaInicial
+  // );
+
+  //   if (yaReservado) {
+  //     this.mostrarDialogo('dialogError2');
+  //     return;
+  //   }
+
+  //   this.horarioSeleccionado = horario;
+  //   const modal = document.getElementById('dialogConfirmation') as HTMLDialogElement;
+  //   if (modal) {
+  //   document.getElementById('selected-time')!.textContent = `${horario.start} – ${horario.end}`;
+  //   modal.showModal();
+  //   }
+  // }
+  get yaTieneReservaDelDia(): boolean {
+  return this.horarios.some(h =>
+    (h.estado === 'pendiente' || h.estado === 'confirmado') &&
+    h.fecha === this.fechaInicial
+  );
+}
+
+seleccionarHorario(horario: any): void {
+  const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+   // Bloquear si el usuario ya tiene una reserva en el mismo día y área
+  const yaReservado = this.horarios.some(h =>
+    (h.estado === 'pendiente' || h.estado === 'confirmado') &&
+    h.fecha === this.fechaInicial &&
+    Number(this.areaSeleccionada) === Number(h.idambiente) &&
+    Number(h.idusuario) === Number(usuario.idusuario) // verifica usuario actual
   );
 
-    if (yaReservado) {
-      this.mostrarDialogo('dialogError2');
-      return;
-    }
-
-    this.horarioSeleccionado = horario;
-    const modal = document.getElementById('dialogConfirmation') as HTMLDialogElement;
-    if (modal) {
-    document.getElementById('selected-time')!.textContent = `${horario.start} – ${horario.end}`;
-    modal.showModal();
-    }
+  if (yaReservado) {
+    this.mostrarDialogo('dialogError2');
+    return; // Bloquea la selección
   }
+
+  if (horario.estado !== 'libre') {
+    return; // Solo permitir si está libre
+  }
+
+  this.horarioSeleccionado = horario;
+
+  const modal = document.getElementById('dialogConfirmation') as HTMLDialogElement;
+  if (modal) {
+    document.getElementById('selected-time')!.textContent = `${horario.hora_inicio} – ${horario.hora_fin}`;
+    modal.showModal();
+  }
+}
+
+
 
 confirmarReserva(): void {
   if (this.horarioSeleccionado) {
@@ -237,25 +315,51 @@ confirmarReserva(): void {
       return;
     }
 
+    const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+    const adultoss = Number(this.adultos) > 0 ? this.adultos : 0;
+    const ninoss = Number(this.ninos) > 0 ? this.ninos : 0;
+
     const reserva = {
-      area: this.areaSeleccionada,
+      idusuario: usuario.idusuario,
+      idambiente: this.areaSeleccionada,
       fecha: this.fechaInicial,
-      horaInicio: this.horarioSeleccionado.start,
-      horaFin: this.horarioSeleccionado.end,
-      adultos: this.adultos,
-      ninos: this.ninos,
+      hora_inicio: this.horarioSeleccionado.hora_inicio,
+      hora_fin: this.horarioSeleccionado.hora_fin,
+      adultos: adultoss,
+      ninos: ninoss,
     };
 
-    this.reservasConfirmadas.push(reserva);
-    localStorage.setItem('reservas', JSON.stringify(this.reservasConfirmadas));
+    console.log('Datos enviados:', reserva);
 
-    this.filtrarHorariosOcupados();
-    this.horarioSeleccionado = null;
-    this.adultos = 0;
-    this.ninos = 0;
+    // 🔥 Primero bloqueamos el horario seleccionado (amarillo)
+    this.horarioSeleccionado.estado = 'bloqueado';
 
-    this.mostrarDialogo('dialogConfirmation');
+    // 📝 Guardamos la reserva en la BD
+    this.rs.__be_postreservas(reserva).subscribe({
+      next: (response) => {
+        console.log('Reserva guardada:', response);
 
+        // 🔄 Refrescar horarios desde la API para que Angular pinte los cambios
+        this.buscarHorarios();
+
+        // ✅ Mostrar mensaje de confirmación
+        this.mostrarDialogo('dialogConfirmation');
+
+        // Limpiar selección
+        this.horarioSeleccionado = null;
+        this.adultos = 0;
+        this.ninos = 0;
+      },
+      error: (err) => {
+        console.error('Error al guardar reserva:', err);
+        this.mostrarDialogo('dialogError2');
+
+        // Si falla, liberar el bloqueo
+        if (this.horarioSeleccionado) {
+          this.horarioSeleccionado.estado = 'libre';
+        }
+      }
+    });
   }
 }
 
@@ -274,16 +378,10 @@ confirmarReserva(): void {
 
 
 mostrarDialogo(id: string): void {
-  const dlg = document.getElementById(id) as HTMLDialogElement;
-  if (!dlg) return;
-
-  dlg.classList.remove('fade-out'); // Asegura que no tenga la clase previa
-  dlg.showModal();
-
-  setTimeout(() => {
-    dlg.classList.add('fade-out');
-    setTimeout(() => dlg.close(), 500); // Espera a que termine la transición
-    }, 2000); // Mostrar el modal por 2s antes de empezar a desvanecer
+    const dlg = document.getElementById(id) as HTMLDialogElement;
+    if (!dlg) return;
+    dlg.showModal();
+    setTimeout(() => dlg.close(), 2000);
   }
 
   // Función para abrir y cerrar el menú de invitados

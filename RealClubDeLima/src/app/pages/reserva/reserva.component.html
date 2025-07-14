@@ -1,19 +1,42 @@
-<ng-container *ngIf="reserva; else sinInfo">
-  <div class="booking">
-    <div class="booking--tapizado">
-        <h2 class="booking__titulo">Detalle de Reserva</h2>
-        <h3 class="booking__instruction">Confirme la información de su reserva</h3>
-        <p class="booking__parrafo parrafo--fondo"><strong class="parrafo--subtitulo">Área:</strong> {{ obtenerNombreArea(reserva.area) }}</p>
-        <p class="booking__parrafo parrafo--fondo"><strong class="parrafo--subtitulo">Fecha:</strong> {{ reserva.fecha }}</p>
-        <p class="booking__parrafo parrafo--fondo"><strong class="parrafo--subtitulo">Horario:</strong> {{ reserva.horaInicio }} – {{ reserva.horaFin }}</p>
-
-    </div>
-    <button routerLink="../login" class="booking__button button--confirm">Confirmar Reserva</button>
-    <button routerLink="../login" class="booking__button button--cancel">Cancelar Reserva</button>
-    <button routerLink="../reserva2" class="booking__button">Volver</button>
+<div class="detalle-tarjeta" *ngIf="reserva">
+  <div class="detalle-encabezado" [ngClass]="reserva.estado">
+    <img [src]="reserva.imagenurl || 'assets/img/default.jpg'" alt="Imagen del ambiente" class="detalle-imagen">
+    <h2 class="detalle-titulo">{{ reserva.nombre_ambiente }}</h2>
+    <span class="detalle-estado">{{ reserva.estado | titlecase }}</span>
   </div>
-</ng-container>
 
-<ng-template #sinInfo>
-  <p>No se pudo recuperar la información de la reserva.</p>
-</ng-template>
+  <div class="detalle-contenido">
+    <p><i class="fa fa-calendar"></i> <strong>Fecha: </strong> {{ reserva.fecha }}</p>
+    <p><i class="fa fa-clock"></i> <strong>Horario: </strong> {{ reserva.hora_inicio }} – {{ reserva.hora_fin }}</p>
+    <p><i class="fa fa-users"></i> <strong>Invitados: </strong> {{ reserva.adultos }} adultos, {{ reserva.ninos }} niños</p>
+    <p><i class="fa fa-money-bill-wave"></i> <strong>Subtotal: </strong> S/. {{ reserva.subtotal }}</p>
+    <p><i class="fa fa-wallet"></i> <strong>Costo Total: </strong> S/. {{ reserva.costo_total }}</p>
+  </div>
+
+  <div class="detalle-botones">
+    <button class="btn-volver" (click)="volver()">
+      <i class="fa fa-arrow-left"></i> Volver
+    </button>
+     <button *ngIf="reserva.estado === 'pendiente'" 
+            class="btn-confirmar"
+            (click)="confirmarReserva()">
+      Confirmar Reserva
+    </button>
+
+    <button *ngIf="reserva.estado === 'pendiente' || reserva.estado === 'confirmado'"
+            class="btn-cancelar"
+            (click)="cancelarReserva()">
+      <i class="fa fa-times-circle"></i> Cancelar Reserva
+    </button>
+  </div>
+</div>
+
+<!-- Modal de Confirmación Exitosa -->
+<dialog id="modalConfirmacion" class="modal">
+  <div class="modal-content">
+    <h2>✅ Reserva confirmada</h2>
+    <p>La reserva se ha confirmado correctamente.</p>
+    <button class="btn btn-primary" (click)="cerrarModal()">Aceptar</button>
+  </div>
+</dialog>
+

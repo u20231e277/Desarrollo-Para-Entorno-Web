@@ -1,80 +1,157 @@
-.booking {
-    width: 340px;
-    height: 600px;
-    background-color: rgb(176, 192, 247) ; 
-    margin: auto;
-    margin-top: 25px;
-    padding: 20px;
-    font-family: 'Times New Roman', Times, serif;
-    box-shadow: 0px 0px 30px 0px #14274a;
-    color: #14274a;
-    border: 1px solid #899aba;
-    border-radius: 6px;
+.detalle-tarjeta {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin: 1rem;
+  display: flex;
+  flex-direction: column;
 }
 
-.booking--tapizado{
-    background-color: rgb(245, 247, 254);
-    height: 400px;
-    padding: 15px;
-    border: 1px solid #14274a;
-    border-radius: 4px;
+.detalle-encabezado {
+  position: relative;
 }
 
-.booking__titulo {
-    color: #14274a;
-    font-family: 'Times New Roman';
-    font-size: 24px;
-    text-align: center;
+.detalle-encabezado img {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
-.booking__instruction {
-    margin: 0px;
-    margin-bottom: 20px;
-    font-family: 'Times New Roman';
-    font-size: 18px;
+.detalle-titulo {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
 }
 
-.booking__parrafo {
-    color: #14274a;
-    margin-bottom: 40px;
-    font-family: inherit;
+.detalle-estado {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #e74c3c;
+  color: #fff;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  text-transform: capitalize;
 }
 
-.parrafo--fondo {
-    border: 1px solid #14274a;
-    border-radius: 4px;
-    padding: 4.5px;
-    text-align: center;
-    background-color: rgb(211, 221, 255);
+.detalle-encabezado.pendiente .detalle-estado {
+  background: #f1c40f;
 }
 
-.parrafo--subtitulo {
-    font-family: inherit;
+.detalle-encabezado.confirmado .detalle-estado {
+  background: #2ecc71;
 }
 
-.booking__button {
-    width: 300px;
-    margin-top: 20px;
-    background-color: #14274a;
-    color: white;
-    letter-spacing: 5px;
-    font-weight: bold;
-    font-family: 'Gill Sans';
-    border-radius: 4px;
-    padding: 5px;
-    font-size: 16px;
+.detalle-encabezado.cancelado .detalle-estado {
+  background: #e74c3c;
 }
 
-.button--confirm {
-    background-color: rgb(2, 166, 2);
-    color: #14274a;
-    letter-spacing: 3px;
-    font-size: 18px;
+.detalle-contenido {
+  padding: 1rem;
+  font-size: 1rem;
+  color: #333;
 }
 
-.button--cancel {
-    background-color: rgb(250, 75, 75);
-    color: #14274a;
-    letter-spacing: 3px;
-    font-size: 18px;
+.detalle-contenido p {
+  margin: 0.5rem 0;
+}
+
+.detalle-botones {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  border-top: 1px solid #eee;
+}
+
+.btn-volver, .btn-cancelar {
+  border: none;
+  border-radius: 5px;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.btn-volver {
+  background-color: #3498db;
+  color: #fff;
+}
+
+.btn-volver:hover {
+  background-color: #2980b9;
+}
+
+.btn-cancelar {
+  background-color: #e74c3c;
+  color: #fff;
+}
+
+.btn-cancelar:hover {
+  background-color: #c0392b;
+}
+.btn-confirmar {
+  background-color: #4caf50;
+  color: white;
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-confirmar:hover {
+  background-color: #43a047;
+}
+
+.estado-pendiente {
+  color: orange;
+  font-weight: bold;
+}
+
+.estado-confirmado {
+  color: green;
+  font-weight: bold;
+}
+
+.estado-cancelado {
+  color: red;
+  font-weight: bold;
+}
+.modal {
+  border: none;
+  border-radius: 10px;
+  width: 300px;
+  padding: 20px;
+  background-color: #fff;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.modal-content h2 {
+  margin-bottom: 10px;
+  color: #28a745;
+}
+
+.modal-content p {
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.modal-content button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.modal-content button:hover {
+  background-color: #0056b3;
 }
