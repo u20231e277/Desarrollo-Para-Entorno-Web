@@ -2,8 +2,13 @@
   <!-- LISTADO DE EVENTOS -->
   <div class="events">
     <h2>Eventos</h2>
+    <!-- Indicador de carga -->
+    <p *ngIf="cargando">Cargando…</p>
 
-    <!-- Genera un bloque por cada evento -->
+    <!-- Mensaje de error -->
+    <p *ngIf="errorMsg" style="color: red;">{{ errorMsg }}</p>
+
+    <!-- Un bloque por cada evento -->
     <div class="events__item" *ngFor="let ev of events; trackBy: trackById">
       <h3>{{ ev.nombre }}</h3>
 
@@ -22,13 +27,18 @@
 
     <form (ngSubmit)="enviarSugerencia()" #formSug="ngForm">
       <label for="nombre">Tu nombre:</label>
-      <input id="nombre" name="nombre" ngModel required>
+      <input id="nombre" name="nombre" ngModel required />
 
       <label for="sugerencia">¿Qué evento te gustaría ver en el club?</label>
-      <textarea id="sugerencia" name="sugerencia" rows="5" ngModel required></textarea>
+      <textarea
+        id="sugerencia"
+        name="sugerencia"
+        rows="5"
+        ngModel
+        required
+      ></textarea>
 
       <button type="submit" [disabled]="formSug.invalid">Enviar sugerencia</button>
     </form>
   </div>
 </div>
-
