@@ -5,11 +5,11 @@ interface Evento {
   id: number;
   nombre: string;
   tematica: string;
-  fecha: string;     // ISO yyyy-MM-dd
+  fecha: string;
 }
 
-/* URL del endpoint API Gateway */
 const API_EVENTS = 'https://9ceoxvw7mb.execute-api.us-east-1.amazonaws.com/realClubLima/events';
+const LS_KEY     = 'eventosRegistrados';
 
 @Component({
   selector: 'app-events',
@@ -22,17 +22,26 @@ export class EventsComponent implements OnInit {
   cargando = true;
   errorMsg = '';
 
-  constructor(private http: HttpClient) { }
+  /* NUEVO */
+  successMsg = '';
+  suggestionMsg = '';
+  private registrados = new Set<number>();
+
+  constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
+    // Carga ids ya registrados desde localStorage
+    const ids = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
+    this.registrados = new Set<number>(ids);
+
     this.cargarEventos();
   }
 
   private cargarEventos(): void {
-    this.http.get<{ statusCode: number; body: string }>(API_EVENTS)
+    this.http
+      .get<{ statusCode: number; body: string }>(API_EVENTS)
       .subscribe({
         next: resp => {
-          /* La Lambda devuelve body como string → JSON.parse */
           this.events = JSON.parse(resp.body) as Evento[];
           this.cargando = false;
         },
@@ -44,15 +53,36 @@ export class EventsComponent implements OnInit {
       });
   }
 
-  /* Utilizado por *ngFor para mejorar rendimiento */
-  trackById = (_: number, ev: Evento) => ev.id;
-
+  /* ---------- REGISTRO DE EVENTO ---------- */
   registrar(ev: Evento): void {
-    console.log('Registrarse en:', ev);
-    /* Aquí pondrás tu lógica real de inscripción */
+    if (this.registrados.has(ev.id)) return;      // doble clic
+
+    this.registrados.add(ev.id);
+    localStorage.setItem(LS_KEY,
+      JSON.stringify([...this.registrados]));
+
+    this.successMsg = `¡Te registraste correctamente en “${ev.nombre}”!`;
+
+    // Oculta mensaje después de 3 s
+    setTimeout(() => (this.successMsg = ''), 3000);
   }
 
-  enviarSugerencia(): void {
-    console.log('Sugerencia enviada');
+  yaRegistrado(id: number): boolean {
+    return this.registrados.has(id);
   }
+
+  /* ---------- SUGERENCIAS ---------- */
+  enviarSugerencia(form: any): void {
+    if (form.invalid) return;
+
+    // Aquí podrías POSTear la sugerencia al backend
+    console.log('Sugerencia:', form.value);
+
+    this.suggestionMsg = '¡Sugerencia enviada correctamente!';
+    setTimeout(() => (this.suggestionMsg = ''), 3000);
+
+    form.resetForm();
+  }
+
+  trackById = (_: number, ev: Evento) => ev.id;
 }
