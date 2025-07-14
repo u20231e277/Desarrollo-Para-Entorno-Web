@@ -189,25 +189,30 @@ confirmarReserva(): void {
 }
 
 confirmarCancelacion(): void {
-    this.rs.__be_CancelarReserva(this.reserva.idreserva).subscribe({
-      next: (response) => {
-        console.log('✅ Reserva cancelada:', response);
+  if (!this.reserva?.idreserva) return;
 
-        this.mensajeCancelacionMostrado = true; // mostrar mensaje
-        //alert('✅ Reserva cancelada correctamente');
-        this.router.navigate(['/reserva2']); // Redirige a la lista
-      },
-      error: (err) => {
-        console.error('Error al cancelar la reserva:', err);
-        //alert('❌ No se pudo cancelar la reserva');
-      }
-      
-    });
+  this.rs.__be_CancelarReserva(this.reserva.idreserva).subscribe({
+    next: (res) => {
+      console.log('Reserva cancelada:', res);
+
+      // ✅ Mostrar mensaje dentro del modal
+      this.mensajeCancelacionMostrado = true;
+
+      // ⏳ Esperar 2 segundos y luego cerrar modal + redirigir
       setTimeout(() => {
-    this.mensajeCancelacionMostrado = false; // ocultar mensaje
-    this.cerrarModal(); // cerrar modal
-  }, 2000);
+        const modal = document.getElementById('dialogCancel') as HTMLDialogElement;
+        if (modal) modal.close();
 
+        // 🔄 Redirigir a reserva2
+        this.router.navigate(['/reserva2']);
+      }, 2000);
+    },
+    error: (err) => {
+      console.error('Error al cancelar reserva:', err);
+      this.mensajeCancelacionMostrado = false;
+      alert('❌ Ocurrió un error al cancelar la reserva');
+    }
+  });
 }
 
   volver(): void {
@@ -223,7 +228,7 @@ confirmarCancelacion(): void {
 
 cerrarModal(): void {
   const modal = document.getElementById('dialogCancel') as HTMLDialogElement;
-  modal?.close();
+  if (modal) modal.close();
 }
 
 }
