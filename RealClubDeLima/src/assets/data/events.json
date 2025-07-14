@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "nombre": "Torneo de Tenis",
+    "tematica": "Deporte",
+    "fecha": "2025-08-15"
+  },
+  {
+    "id": 2,
+    "nombre": "Noche de Jazz",
+    "tematica": "Música",
+    "fecha": "2025-09-02"
+  },
+  {
+    "id": 3,
+    "nombre": "Fiesta de Verano",
+    "tematica": "Social",
+    "fecha": "2025-12-05"
+  }
+]
