@@ -1,7 +1,7 @@
 /* Footer */
 .piepagina {
     text-align: center;
-    position: fixed;
+    /* position: fixed; */
     bottom: 0;
     width: 100%;
     color: rgb(255, 255, 255);

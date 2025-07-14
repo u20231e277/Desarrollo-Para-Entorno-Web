@@ -11,13 +11,19 @@ export class HeaderComponent {
   @ViewChild('nav') nav!: ElementRef;
 
   sesionActiva: boolean = false;
+   isAdmin: boolean = false;
+  isSocio: boolean = false;
 
   constructor(private router: Router) {}
 
   ngOnInit(): void {
     // Verifica si hay un usuario guardado
-    const usuario = localStorage.getItem('usuario');
+    const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
     this.sesionActiva = !!usuario;
+
+     if (usuario.codigo === '0001') {
+      this.isAdmin = true;
+    }
   }
 
   toggleNav(open: boolean): void {
@@ -37,6 +43,8 @@ export class HeaderComponent {
     // Limpia la sesión
     localStorage.removeItem('usuario');
     this.sesionActiva = false; // Oculta botón
+    this.isAdmin = false;      
+  this.isSocio = false; 
     this.router.navigate(['/inicio']); // Redirige al login
     
   }

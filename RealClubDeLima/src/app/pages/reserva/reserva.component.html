@@ -25,7 +25,7 @@
 
     <button *ngIf="reserva.estado === 'pendiente' || reserva.estado === 'confirmado'"
             class="btn-cancelar"
-            (click)="cancelarReserva()">
+            (click)="cancelarReserva1()">
       <i class="fa fa-times-circle"></i> Cancelar Reserva
     </button>
   </div>
@@ -38,5 +38,19 @@
     <p>La reserva se ha confirmado correctamente.</p>
     <button class="btn btn-primary" (click)="cerrarModal()">Aceptar</button>
   </div>
+</dialog>
+
+<dialog id="dialogCancel">
+  <div>
+    <p>¿Estás seguro de que deseas cancelar esta reserva?</p>
+    <div class="buttons">
+      <button (click)="confirmarCancelacion()" class="btn-confirmar">Sí</button>
+      <button (click)="cerrarModal()" class="btn-cancelar1">No</button>
+    </div>
+  </div>
+  <!-- Mensaje de éxito -->
+    <div *ngIf="mensajeCancelacionMostrado" class="mensaje-exito">
+      ✅ Cancelación exitosa
+    </div>
 </dialog>
 

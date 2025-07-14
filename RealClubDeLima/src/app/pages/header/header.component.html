@@ -49,10 +49,10 @@
                 stroke-linecap="round"
                 stroke-linejoin="round" /></svg>Reservar</a>
         </li>
-        <li *ngIf="sesionActiva"><a routerLink="#">Eventos</a></li>
+        <li *ngIf="sesionActiva"><a routerLink="/events">Eventos</a></li>
         <li *ngIf="sesionActiva"><a routerLink="#">Ajustes</a></li>
         <li><a routerLink="#">TalkBack</a></li>
-        <li *ngIf="sesionActiva"><a routerLink="/report">Reportes</a></li>
+        <li *ngIf=" isAdmin sesionActiva"><a routerLink="/report">📊 Reportes </a></li>
         <li><a routerLink="#">Política de Privacidad</a></li>
         <li><a routerLink="#">Términos del Servicio</a></li>
         <li *ngIf="sesionActiva"><a routerLink="#" (click)="cerrarSesion()">Cerrar Sesión</a>

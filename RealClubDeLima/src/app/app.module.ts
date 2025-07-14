@@ -26,6 +26,7 @@ import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './pages/login/login.component';
 import { EventsComponent } from './pages/events/events.component';
+import { ErrorComponent } from './pages/error/error.component';
 
 
 
@@ -43,7 +44,8 @@ import { EventsComponent } from './pages/events/events.component';
     Reserva2Component,
     ReservaComponent,
     LoginComponent,
-    EventsComponent
+    EventsComponent,
+    ErrorComponent
     
   ],
   imports: [

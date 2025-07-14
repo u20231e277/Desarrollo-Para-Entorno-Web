@@ -21,6 +21,8 @@ import { HorariosService } from 'src/app/services/horarios.service';
 })
 export class HomeComponent implements OnInit {
 
+  isAdmin: boolean = false;
+    isSocio: boolean = false;
  
   fechaInicial: string = '';
   fechaFinal: string = '';
@@ -72,6 +74,15 @@ export class HomeComponent implements OnInit {
 
   
   ngOnInit(): void {
+
+    const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+
+        // Compara por rol
+    if (usuario.rol === 'admin') {
+      this.isAdmin = true;
+    }else if (usuario.rol === 'socio') {
+      this.isSocio = true;
+    }
 
     this.__listar_Ambientes();
        this.areasFiltradas = [...this.areasDisponibles];
@@ -154,9 +165,10 @@ buscarHorarios(): void {
       return;
     }
 
+  const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
   const idambiente = Number(this.areaSeleccionada); // convierte a número
 
-  this.hs.__be_postHorariosConEstado(idambiente, this.fechaInicial).subscribe({
+  this.hs.__be_postHorariosConEstado(idambiente, this.fechaInicial, usuario.idusuario).subscribe({
     next: (response) => {
       console.log('Horarios obtenidos:', response);
 
@@ -224,48 +236,30 @@ buscarHorarios(): void {
 //   }
 
 
-generarHorarios(): void {
-  this.horariosDisponibles = [];
+// generarHorarios(): void {
+//   this.horariosDisponibles = [];
 
-  // Inicio: 7:00 AM
-  const inicio = new Date(`${this.fechaInicial}T07:00`);
-  // Fin: 9:00 PM
-  const fin = new Date(`${this.fechaInicial}T21:00`);
+//   // Inicio: 7:00 AM
+//   const inicio = new Date(`${this.fechaInicial}T07:00`);
+//   // Fin: 9:00 PM
+//   const fin = new Date(`${this.fechaInicial}T21:00`);
 
-  while (inicio < fin) {
-    // Hora de inicio
-    const start = inicio.toTimeString().substring(0, 5);
+//   while (inicio < fin) {
+//     // Hora de inicio
+//     const start = inicio.toTimeString().substring(0, 5);
 
-    // Sumar 1 hora para el turno
-    const siguiente = new Date(inicio.getTime() + 60 * 60000);
-    const end = siguiente.toTimeString().substring(0, 5);
+//     // Sumar 1 hora para el turno
+//     const siguiente = new Date(inicio.getTime() + 60 * 60000);
+//     const end = siguiente.toTimeString().substring(0, 5);
 
-    // Agregar al array
-    this.horariosDisponibles.push({ start, end });
+//     // Agregar al array
+//     this.horariosDisponibles.push({ start, end });
 
-    // Sumar 1h15min (turno + limpieza de 15min)
-    inicio.setMinutes(inicio.getMinutes() + 75);
-  }
-}
+//     // Sumar 1h15min (turno + limpieza de 15min)
+//     inicio.setMinutes(inicio.getMinutes() + 75);
+//   }
+// }
 
-  // seleccionarHorario(horario: { start: string; end: string }): void {
-  // const yaReservado = this.reservasConfirmadas.some(r =>
-  //   r.area === this.areaSeleccionada &&
-  //   r.fecha === this.fechaInicial
-  // );
-
-  //   if (yaReservado) {
-  //     this.mostrarDialogo('dialogError2');
-  //     return;
-  //   }
-
-  //   this.horarioSeleccionado = horario;
-  //   const modal = document.getElementById('dialogConfirmation') as HTMLDialogElement;
-  //   if (modal) {
-  //   document.getElementById('selected-time')!.textContent = `${horario.start} – ${horario.end}`;
-  //   modal.showModal();
-  //   }
-  // }
   get yaTieneReservaDelDia(): boolean {
   return this.horarios.some(h =>
     (h.estado === 'pendiente' || h.estado === 'confirmado') &&
@@ -275,21 +269,12 @@ generarHorarios(): void {
 
 seleccionarHorario(horario: any): void {
   const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
-   // Bloquear si el usuario ya tiene una reserva en el mismo día y área
-  const yaReservado = this.horarios.some(h =>
-    (h.estado === 'pendiente' || h.estado === 'confirmado') &&
-    h.fecha === this.fechaInicial &&
-    Number(this.areaSeleccionada) === Number(h.idambiente) &&
-    Number(h.idusuario) === Number(usuario.idusuario) // verifica usuario actual
-  );
 
-  if (yaReservado) {
-    this.mostrarDialogo('dialogError2');
-    return; // Bloquea la selección
-  }
-
+  // Revisar si el usuario actual ya tiene una reserva en el mismo área y fecha
   if (horario.estado !== 'libre') {
-    return; // Solo permitir si está libre
+    // Si está bloqueado o confirmado, mostrar mensaje y bloquear selección
+    this.mostrarDialogo('dialogError2');
+    return;
   }
 
   this.horarioSeleccionado = horario;
@@ -300,6 +285,7 @@ seleccionarHorario(horario: any): void {
     modal.showModal();
   }
 }
+
 
 
 
@@ -334,7 +320,7 @@ confirmarReserva(): void {
     // 🔥 Primero bloqueamos el horario seleccionado (amarillo)
     this.horarioSeleccionado.estado = 'bloqueado';
 
-    // 📝 Guardamos la reserva en la BD
+    // Guardamos la reserva en la BD
     this.rs.__be_postreservas(reserva).subscribe({
       next: (response) => {
         console.log('Reserva guardada:', response);
@@ -344,6 +330,7 @@ confirmarReserva(): void {
 
         // ✅ Mostrar mensaje de confirmación
         this.mostrarDialogo('dialogConfirmation');
+        window.location.href = '/reserva2';
 
         // Limpiar selección
         this.horarioSeleccionado = null;

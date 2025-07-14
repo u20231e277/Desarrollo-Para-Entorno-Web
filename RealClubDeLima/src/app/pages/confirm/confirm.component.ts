@@ -3,13 +3,7 @@ import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 
 interface ReservationData {
-  id: string;
-  date: Date;
-  time: string;
-  guests?: number;
-  service?: string;
-  customerName?: string;
-  email?: string;
+  dataMap: any;
 }
 
 @Component({
@@ -19,13 +13,18 @@ interface ReservationData {
 })
 export class ConfirmComponent implements OnInit {
   reservationData: ReservationData | null = null;
-  contactPhone: string = '+1 (555) 123-4567';
+  contactPhone: string = '+1 (51) 207-0760';
   showAnimation: boolean = false;
+  date: string = '';
+  time: string = '';
 
   constructor(
     private router: Router,
     private location: Location
-  ) {}
+  ) {
+    this.date = new Date().toLocaleDateString('es-ES');
+    this.time = new Date().toLocaleTimeString('es-ES');
+  }
 
   ngOnInit(): void {
     this.loadReservationData();
@@ -37,12 +36,14 @@ export class ConfirmComponent implements OnInit {
    */
   private loadReservationData(): void {
     // Intentar obtener datos del estado de navegación
-    const navigation = this.router.getCurrentNavigation();
-    if (navigation?.extras?.state) {
-      this.reservationData = navigation.extras.state as ReservationData;
-    } else {
+    // const navigation = this.router.getCurrentNavigation();
+    // if (navigation?.extras?.state) {
+    //   this.reservationData = navigation.extras.state as ReservationData;
+    // } else {
       // Fallback: obtener desde localStorage
       const storedData = localStorage.getItem('reservationData');
+      console.log('📤 storedData:', storedData);
+      
       if (storedData) {
         try {
           this.reservationData = JSON.parse(storedData);
@@ -50,21 +51,18 @@ export class ConfirmComponent implements OnInit {
           localStorage.removeItem('reservationData');
         } catch (error) {
           console.error('Error parsing reservation data:', error);
+          window.location.href = '/inicio';
         }
+        
       }
-    }
+      else{
+        window.location.href = '/inicio';
+      }
+    // }
 
     // Datos de ejemplo si no hay datos reales
-    if (!this.reservationData) {
-      this.reservationData = {
-        id: this.generateReservationId(),
-        date: new Date(),
-        time: '19:00',
-        guests: 2,
-        service: 'Cena',
-        customerName: 'Usuario'
-      };
-    }
+    // if (!this.reservationData) {
+    // }
   }
 
   /**
@@ -95,7 +93,7 @@ export class ConfirmComponent implements OnInit {
    */
   viewReservation(): void {
     if (this.reservationData) {
-      this.router.navigate(['/reservations', this.reservationData.id]);
+      this.router.navigate(['/reservations', this.reservationData.dataMap.TRANSACTION_ID]);
     }
   }
 
@@ -122,7 +120,7 @@ export class ConfirmComponent implements OnInit {
     if (navigator.share && this.reservationData) {
       navigator.share({
         title: 'Mi Reserva',
-        text: `Reserva confirmada para el ${this.reservationData.date}`,
+        text: `Reserva confirmada para el ${this.reservationData.dataMap.TRANSACTION_DATE.split('T')[0]}`,
         url: window.location.href
       });
     }

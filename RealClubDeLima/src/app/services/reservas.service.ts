@@ -33,14 +33,15 @@ __be_CancelarReserva(idreserva: number) {
 
   console.log('📤 Enviando payload:', payload); // para debug
 
-  return this.http.post(`${this.apiUrl2}/cancelarReserva`, payload, { headers });
+  return this.http.delete(`${this.apiUrl2}`, { headers, body: payload });
 }
 
 //Confirmar reserva
-  __be_patchconfirmarReserva(idreserva: number) {
+  __be_patchconfirmarReserva(idreserva: number, metodo: string | null=null) {
   const body = {
     idreserva: idreserva,
-    nuevo_estado: 'confirmado'
+    nuevo_estado: 'confirmado',
+    metodo: metodo
   };
   return this.http.patch(`${this.apiUrlConfirmar}`, body);
 }

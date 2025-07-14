@@ -1,7 +1,7 @@
 /* Contenedor principal */
 .confirmation-container {
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  min-height: 100vh;
+  min-height: 80vh;
   padding: 20px 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -47,8 +47,8 @@
 }
 
 .success-icon {
-  animation: successPulse 1.5s ease-in-out;
-  filter: drop-shadow(0 4px 8px rgba(40, 167, 69, 0.3));
+ /* animation: successPulse 1.5s ease-in-out; */
+  filter: drop-shadow(0 4px 8px rgba(22, 71, 34, 0.3));
 }
 
 @keyframes successPulse {
@@ -91,7 +91,7 @@
   font-weight: 700;
   color: #2c3e50;
   margin-bottom: 20px;
-  background: linear-gradient(45deg, #28a745, #20c997);
+  background:  #238139;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -113,7 +113,7 @@
   border-radius: 15px;
   padding: 25px;
   margin-bottom: 30px;
-  border-left: 4px solid #28a745;
+  border-left: 4px solid #238139;
   animation: fadeInUp 0.8s ease-out 0.4s both;
 }
 
@@ -158,7 +158,7 @@
 }
 
 .btn-primary {
-  background: linear-gradient(45deg, #007bff, #0056b3);
+  background: #29337c;
   color: white;
   box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
 }
@@ -166,7 +166,7 @@
 .btn-primary:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
-  background: linear-gradient(45deg, #0056b3, #004085);
+  background: #29337ca0;
 }
 
 .btn-outline-secondary {

@@ -10,9 +10,10 @@ export class HorariosService {
 
   constructor(private http: HttpClient) {}
 
-  __be_postHorariosConEstado(idambiente: number, fecha: string): Observable<any> {
-    const data = { idambiente, fecha };
-    return this.http.post(this.apiUrl, data, { responseType: "json" });
-  }
+
+  __be_postHorariosConEstado(idambiente: number, fecha: string, idusuario: number) {
+  const data = { idambiente, fecha, idusuario };
+  return this.http.post<any>(`${this.apiUrl}`, data, { responseType: "json" });
+}
 
 }

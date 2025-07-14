@@ -69,7 +69,7 @@
   border-top: 1px solid #eee;
 }
 
-.btn-volver, .btn-cancelar {
+.btn-volver, .btn-cancelar, .btn-cancelar1 {
   border: none;
   border-radius: 5px;
   padding: 0.6rem 1.2rem;
@@ -94,9 +94,17 @@
 .btn-cancelar:hover {
   background-color: #c0392b;
 }
+.btn-cancelar1 {
+  background-color: #27337c;
+  color: #fff;
+}
+
+.btn-cancelar1:hover {
+  background-color: #27337c;
+}
 .btn-confirmar {
-  background-color: #4caf50;
-  color: white;
+  background-color: #ffffff;
+  color: #27337c;
   padding: 0.7rem 1.5rem;
   border: none;
   border-radius: 6px;
@@ -106,7 +114,7 @@
 }
 
 .btn-confirmar:hover {
-  background-color: #43a047;
+  background-color: #ffffff;
 }
 
 .estado-pendiente {
@@ -154,4 +162,10 @@
 
 .modal-content button:hover {
   background-color: #0056b3;
+}
+.mensaje-exito {
+  margin-top: 10px;
+  color: #14274a;
+  font-weight: bold;
+  text-align: center;
 }

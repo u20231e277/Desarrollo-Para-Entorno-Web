@@ -10,6 +10,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { Reserva2Component } from './pages/reserva2/reserva2.component';
 import { ReservaComponent } from './pages/reserva/reserva.component';
 import {EventsComponent} from './pages/events/events.component';
+import { ErrorComponent } from './pages/error/error.component';
 
 const routes: Routes = [
   { path: "", redirectTo: "inicio", pathMatch: "full"},
@@ -23,7 +24,8 @@ const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'reserva2', component: Reserva2Component},
   {path: 'reserva', component: ReservaComponent},
-  {path: 'events', component: EventsComponent}
+  {path: 'events', component: EventsComponent},
+  {path: 'error', component: ErrorComponent}
 ];
 
 @NgModule({
